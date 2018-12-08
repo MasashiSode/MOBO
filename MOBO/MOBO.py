@@ -10,10 +10,11 @@ from scipy.optimize import minimize
 class MOGP():
     '''
     MOGP (Multi-Objective Gaussian Process) core class
-    (https://thuijskens.github.io/2016/12/29/bayesian-optimisation/)
 
     Note:
-        Sset parameters first before train
+        Set parameters first before train
+
+        (https://thuijskens.github.io/2016/12/29/bayesian-optimisation/)
 
     Args:
         No args
@@ -237,21 +238,20 @@ class MOGP():
     #     return out
 
     def expected_hypervolume_improvement(self, x, gaussian_process, evaluated_loss, greater_is_better=False, n_params=1):
-        """ expected_hypervolume_improvement
+        """ expected_improvement
         Expected improvement acquisition function.
+
         Arguments:
-        ----------
             x: array-like, shape = [n_samples, n_hyperparams]
-                The point for which the expected improvement needs to be computed.
-            gaussian_process: GaussianProcessRegressor object.
-                Gaussian process trained on previously evaluated hyperparameters.
-            evaluated_loss: Numpy array.
-                Numpy array that contains the values off the loss function for the previously
-                evaluated hyperparameters.
-            greater_is_better: Boolean.
-                Boolean flag that indicates whether the loss function is to be maximised or minimised.
-            n_params: int.
-                Dimension of the hyperparameter space.
+                The point for which the expected improvement
+                needs to be computed.
+
+        Examples::
+
+            x = np.array([[-4.9, -4.9]])
+            ei = mogp.expected_improvement(x)
+            print(ei)
+
         """
 
         return
