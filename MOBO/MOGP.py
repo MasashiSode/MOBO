@@ -4,6 +4,7 @@ import sklearn.gaussian_process as gp
 from scipy.stats import norm
 from scipy.optimize import minimize
 # from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
+# from scipy import integrate
 
 
 class MOGP():
@@ -45,8 +46,8 @@ class MOGP():
     def set_train_data(self, x_observed, y_observed):
         '''
         Args:
-            x_observed: np.array (n_sample, n_features)
-            y_observed: np.array (n_obj, n_features)
+            x_observed: np.array (n_samples, n_params)
+            y_observed: np.array (n_samples, n_obj)
 
         Return:
             no return
@@ -114,17 +115,18 @@ class MOGP():
             use it after training
 
         Args:
-            x: np.array 1D
+            x: np.array, size = [n_input, n_params]
 
         Return:
-            mu: float or list (n_obj)
-            sigma: float or list (n_obj)
+            mu: float or list, size = [n_obj]
+            sigma: float or list, size = [n_obj
 
         Example::
 
             x = np.array([-5, -5])
             mu, sigma = mogp.predict(x)
             print(mu, sigma)
+
         '''
         x = x.reshape(-1, self.n_params)
         if self.gpr is None:
@@ -197,23 +199,42 @@ class MOGP():
                     self.f_ref[i_obj] = np.max(
                         self.objective_function_observed[:, i_obj])
                     # if mu[i_obj] < self.f_ref[i_obj]:
-                    # return 0
+                    #     ei_x[i_obj] = 0
+                    #     continue
+
                 else:
                     self.f_ref[i_obj] = np.min(
                         self.objective_function_observed[:, i_obj])
                     # if mu[i_obj] > self.f_ref[i_obj]:
-                    # return 0
+                    #     ei_x[i_obj] = 0
+                    #     continue
 
                 # In case sigma equals zero
-                # with np.errstate(divide='ignore'):
-                Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
-                ei_x[i_obj] = \
-                    (mu[i_obj] - self.f_ref[i_obj]) * \
-                    norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
-                # expected_improvement[sigma[i_obj] == 0.0] == 0.0
+                with np.errstate(divide='ignore'):
+                    Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
+                    ei_x[i_obj] = \
+                        (mu[i_obj] - self.f_ref[i_obj]) * \
+                        norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
+                    ei_x[sigma[i_obj] == 0.0] == 0.0
 
-            return - 1 * ei_x
+                # temp1 = float(mu[i_obj])
+                # temp2 = float(sigma[i_obj])
+                # ei_x[i_obj] = integrate.quad(
+                #     self.ei_func, -np.inf, self.f_ref[i_obj],
+                #     args=(temp1, temp2, i_obj))
+
+            return ei_x
         return
+
+    # def ei_func(self, F, mu, sigma, i_obj):
+    #     temp1 = norm.pdf(F, mu, sigma)
+    #     temp2 = abs(self.f_ref[i_obj] - F)
+    #     out = temp1 * temp2
+    #     # out = \
+    #     #     (abs(self.f_ref[i_obj] - F)) * \
+    #     #     norm.pdf(F, mu, sigma)
+    #     # out = float(out[0])
+    #     return out
 
     def expected_hypervolume_improvement(self, x, gaussian_process, evaluated_loss, greater_is_better=False, n_params=1):
         """ expected_hypervolume_improvement
