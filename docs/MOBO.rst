@@ -4,7 +4,7 @@ MOBO package
 Submodules
 ----------
 
-MOBO.MOGP module
+MOGP module
 ----------------
 
 .. automodule:: MOBO.MOGP
