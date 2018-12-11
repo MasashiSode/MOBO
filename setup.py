@@ -4,17 +4,17 @@ from setuptools import setup, find_packages
 #     sys.exit('Sorry, Python >= 3.7 is not supported')
 
 setup(
-    name='pyASOpt',
+    name='MOBO',
     python_requires='<3.7',
     version='0.0.1',
     description='Sample package for Python-Guide.org',
     # long_description=readme,
     author='Masashi Sode',
     author_email='masashi.sode@gmail.com',
-    install_requires=['numpy', 'pandas',
-                      'pynastran', 'pydoe',
+    install_requires=['numpy',
                       'matplotlib', 'scipy',
-                      'pygmo', 'sympy', 'sphinx',
+                      'scikit-learn',
+                      'pygmo', 'sphinx',
                       'sphinxcontrib-seqdiag',
                       'sphinx_rtd_theme',
                       'recommonmark'],
