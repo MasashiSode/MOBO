@@ -70,7 +70,6 @@ class MultiObjectiveBayesianOptimization(object):
 
             cpu = 4
             mobo.set_number_of_cpu_core(cpu)
-
         '''
 
         if type(n_multiprocessing) is not int:
