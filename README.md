@@ -1,4 +1,4 @@
-# PyASOpt
+# MOBO (Multi-Objective Bayesian Optimization)
 
 ## Install
 
