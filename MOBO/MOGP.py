@@ -153,17 +153,21 @@ class MOGP():
                     self.objective_function_observed)
         else:
             # manager.list shares list in the multi-processing
-            manager = mp.Manager()
-            self.gpr = manager.list([None] * self.n_obj)
-            for i_obj in range(0, self.n_obj):
-                self.gpr[i_obj] = \
-                    gp.GaussianProcessRegressor(kernel=kernel, random_state=0)
+            with mp.Manager() as manager:
+                self.gpr = manager.list([None] * self.n_obj)
+                for i_obj in range(0, self.n_obj):
+                    self.gpr[i_obj] = \
+                        gp.GaussianProcessRegressor(kernel=kernel, random_state=0)
 
-            p = mp.Pool(self.n_multiprocessing)
-            p.map(MpHelper(self, 'wrapper_mp'),
-                  range(0, self.n_obj))
-            p.close()
-            p.join()
+                with mp.Pool(self.n_multiprocessing) as p:
+                    # p = mp.Pool(self.n_multiprocessing)
+                    p.map(MpHelper(self, 'wrapper_mp'),
+                          range(0, self.n_obj))
+                    p.close()
+                    p.join()
+                    self.gpr = [x for x in self.gpr]
+
+                manager.shutdown()
         return self.gpr
 
     def wrapper_mp(self, i_obj):
@@ -225,7 +229,7 @@ class MOGP():
 
         if self.flag_cons is True:
             constrained_ei_x = self.constrained_EI(x)
-            return -1 * constrained_ei_x
+            return constrained_ei_x
         else:
             mu = np.zeros(self.n_obj)
             sigma = np.zeros(self.n_obj)
@@ -251,7 +255,7 @@ class MOGP():
                         (mu[i_obj] - self.f_ref[i_obj]) * \
                         norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
                     ei_x[sigma[i_obj] == 0.0] == 0.0
-            return -1 * ei_x
+            return ei_x
         return
 
     def expected_hypervolume_improvement(self, x):
