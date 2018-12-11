@@ -1,16 +1,24 @@
 MOBO package
 ============
 
-.. Submodules
-.. ----------
+Submodules
+----------
 
-.. MOGP module
-.. ----------------
+MOBO.BO module
+--------------
 
-.. .. automodule:: MOBO.MOGP
-..     :members:
-..     :undoc-members:
-..     :show-inheritance:
+.. automodule:: MOBO.BO
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+MOBO.MOGP module
+----------------
+
+.. automodule:: MOBO.MOGP
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 
 Module contents

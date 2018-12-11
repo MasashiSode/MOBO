@@ -1,5 +1,5 @@
 .. MOBO documentation master file, created by
-   sphinx-quickstart on Sat Dec  8 23:56:00 2018.
+   sphinx-quickstart on Tue Dec 11 16:15:44 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
