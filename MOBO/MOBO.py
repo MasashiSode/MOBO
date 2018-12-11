@@ -36,12 +36,6 @@ class MOGP():
 
         (https://thuijskens.github.io/2016/12/29/bayesian-optimisation/)
 
-    Args:
-        No args
-
-    Return:
-        no return
-
     Example::
 
         mogp = MOGPOpt.MOGP()
@@ -117,15 +111,14 @@ class MOGP():
 
     def train(self, kernel=gp.kernels.Matern()):
         '''
+        trains Gaussian process for regression
+
         Note:
             multi-objective optimization (n_obj > 1) is also available.
 
         Args:
             kernel: kernel implemented in sklearn.gp
                 (default: gp.kernels.Matern())
-
-        Return:
-            no return
 
         Example::
 
@@ -174,9 +167,8 @@ class MOGP():
         Args:
             x: np.array, size = [n_input, n_params]
 
-        Return:
-            mu (float or list): size = [n_obj], mean
-            sigma (float or list):, size = [n_obj, variane
+        Returns:
+            mu, sigma (float or list): mean and variance size = [2, n_obj]
 
         Example::
 
@@ -200,7 +192,7 @@ class MOGP():
                     self.gpr[i_obj].predict(x, return_std=True)
                 mu[i_obj] = temp1[0]
                 sigma[i_obj] = temp2[0]
-        return mu, sigma
+        return np.array([mu, sigma])
 
     def expected_improvement(self, x):
         """ expected_improvement

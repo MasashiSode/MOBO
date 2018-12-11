@@ -7,10 +7,10 @@ Submodules
 MOGP module
 ----------------
 
-.. automodule:: MOBO.MOGP
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. .. automodule:: MOBO.MOGP
+..     :members:
+..     :undoc-members:
+..     :show-inheritance:
 
 
 Module contents
