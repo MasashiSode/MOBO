@@ -1,11 +1,11 @@
 MOBO package
 ============
 
-Submodules
-----------
+.. Submodules
+.. ----------
 
-MOGP module
-----------------
+.. MOGP module
+.. ----------------
 
 .. .. automodule:: MOBO.MOGP
 ..     :members:
