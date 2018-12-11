@@ -13,16 +13,16 @@ if __name__ == "__main__":
     y_observed = ReadInput('InputObj.csv')
     x_observed = ReadInput('InputVar.csv')
 
-    Mogp = MOBO.MOGP()
-    Mogp.set_train_data(x_observed, y_observed)
+    mogp = MOBO.MOGP()
+    mogp.set_train_data(x_observed, y_observed)
     # Mogp.set_number_of_cpu_core(1)
-    Mogp.train()
+    mogp.train()
 
     x = np.array([-5, -5])
-    mu, sigma = Mogp.predict(x)
+    mu, sigma = mogp.predict(x)
     print('mu: ', mu)
     print('sigma: ', sigma)
 
     x = np.array([[-4.9, -4.9]])
-    ei = Mogp.expected_improvement(x)
+    ei = mogp.expected_improvement(x)
     print(ei)
