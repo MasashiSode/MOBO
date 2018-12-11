@@ -1,0 +1,31 @@
+package
+
+========
+
+Submodules
+----------
+
+BO module
+---------
+
+.. automodule:: MOBO.BO
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+MOGP module
+-----------
+
+.. automodule:: MOBO.MOGP
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+.. Module contents
+.. ---------------
+
+.. .. automodule::
+..     :members:
+..     :undoc-members:
+..     :show-inheritance:

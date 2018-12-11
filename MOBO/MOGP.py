@@ -95,7 +95,7 @@ class MOGP():
         Args:
             direction_list (list): list of 1 and -1 which expresses the direction of optimum
 
-        Examles::
+        Examples::
 
             direction_list = [-1, 1, -1]
             mogp.set_optimum_direction(direction_list)

@@ -14,16 +14,13 @@
 #
 # import os
 # import sys
-# sys.path.insert(0, 'C:\Users\Masashi\OneDrive\Research\MOGPOpt\MOBO')
+# sys.path.insert(0, 'C:\Users\Masashi\OneDrive\Research\MOGPOpt\MOBO\')
 
 import sphinx_rtd_theme
 from recommonmark.transform import AutoStructify
 from recommonmark.parser import CommonMarkParser
 import os
 import sys
-
-sys.path.insert(0, os.path.abspath('..\\MOBO\\'))
-
 # -- Project information -----------------------------------------------------
 
 project = 'MOBO'
@@ -42,18 +39,6 @@ release = ''
 #
 # needs_sphinx = '1.0'
 
-github_doc_root = 'https://github.com/rtfd/recommonmark/tree/master/doc/'
-
-
-def setup(app):
-    # see https://qiita.com/pashango2/items/d1b379b699af85b529ce
-    app.add_config_value('recommonmark_config', {
-        'url_resolver': lambda url: github_doc_root + url,
-        'auto_toc_tree_section': 'Contents',
-    }, True)
-    app.add_transform(AutoStructify)
-
-
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
@@ -61,7 +46,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -75,6 +60,7 @@ source_suffix = ['.rst', '.md']
 source_parsers = {
     '.md': CommonMarkParser,
 }
+
 # The master toctree document.
 master_doc = 'index'
 
@@ -93,6 +79,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The name of the Pygments (syntax highlighting) style to use.
 # pygments_style = None
 pygments_style = 'sphinx'
+
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -131,7 +118,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'MOBOdoc'
+htmlhelp_basename = 'sphinxdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -158,7 +145,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'MOBO.tex', 'MOBO Documentation',
+    (master_doc, 'sphinx.tex', ' Documentation',
      'Author', 'manual'),
 ]
 
@@ -168,7 +155,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'mobo', 'MOBO Documentation',
+    (master_doc, 'sphinx', ' Documentation',
      [author], 1)
 ]
 
@@ -179,8 +166,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'MOBO', 'MOBO Documentation',
-     author, 'MOBO', 'One line description of project.',
+    (master_doc, 'sphinx', ' Documentation',
+     author, 'sphinx', 'One line description of project.',
      'Miscellaneous'),
 ]
 
