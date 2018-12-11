@@ -135,6 +135,7 @@ class MultiObjectiveBayesianOptimization(object):
             n_clusters : int, optional, default: 8
                 The number of clusters to form as well as the number of
                 centroids to generate.
+
             init : {'k-means++', 'random' or an ndarray}
                 Method for initialization, defaults to 'k-means++':
                 'k-means++' : selects initial cluster centers for k-mean
@@ -144,15 +145,19 @@ class MultiObjectiveBayesianOptimization(object):
                 the initial centroids.
                 If an ndarray is passed, it should be of shape (n_clusters, n_features)
                 and gives the initial centers.
+
             n_init : int, default: 10
                 Number of time the k-means algorithm will be run with different
                 centroid seeds. The final results will be the best output of
                 n_init consecutive runs in terms of inertia.
+
             max_iter : int, default: 300
                 Maximum number of iterations of the k-means algorithm for a
                 single run.
+
             tol : float, default: 1e-4
                 Relative tolerance with regards to inertia to declare convergence
+
             precompute_distances : {'auto', True, False}
                 Precompute distances (faster but takes more memory).
                 'auto' : do not precompute distances if n_samples * n_clusters > 12
@@ -160,12 +165,14 @@ class MultiObjectiveBayesianOptimization(object):
                 double precision.
                 True : always precompute distances
                 False : never precompute distances
+
             verbose : int, default 0
                 Verbosity mode.
+
             random_state : int, RandomState instance or None (default)
                 Determines random number generation for centroid initialization. Use
                 an int to make the randomness deterministic.
-                See :term:`Glossary <random_state>`.
+
             copy_x : boolean, optional
                 When pre-computing distances it is more numerically accurate to center
                 the data first.  If copy_x is True (default), then the original data is
@@ -174,12 +181,13 @@ class MultiObjectiveBayesianOptimization(object):
                 numerical differences may be introduced by subtracting and then adding
                 the data mean, in this case it will also not ensure that data is
                 C-contiguous which may cause a significant slowdown.
+
             n_jobs : int or None, optional (default=None)
                 The number of jobs to use for the computation. This works by computing
                 each of the n_init runs in parallel.
                 ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
-                ``-1`` means using all processors. See :term:`Glossary <n_jobs>`
-                for more details.
+                ``-1`` means using all processors.
+
             algorithm : "auto", "full" or "elkan", default="auto"
                 K-means algorithm to use. The classical EM-style algorithm is "full".
                 The "elkan" variation is more efficient by using the triangle

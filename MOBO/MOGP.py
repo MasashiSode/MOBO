@@ -248,6 +248,7 @@ class MOGP():
                 else:
                     self.f_ref[i_obj] = np.min(
                         self.objective_function_observed[:, i_obj])
+
                 # In case sigma equals zero
                 with np.errstate(divide='ignore'):
                     Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
@@ -274,9 +275,6 @@ class MOGP():
         """ expected_penalty
         Expected penalty to calculate the probability of constraints.
         uses probability of g(x) <= 0. g > 0 is infeasible.
-
-        Note:
-            under construction!
         """
         mean, var = self.predict(x)
         pof = np.ones(self.n_cons)
@@ -294,33 +292,3 @@ class MOGP():
         pof_all = np.prod(pof)
         cei = ei * pof_all
         return cei
-
-#     def run(self, size=48, gen=100):
-#         self.prob = pg.problem(BayesianOptimizationProblem(self.mogp))
-#         self.pop = pg.population(self.prob, size=size)
-#         self.algo = pg.algorithm(pg.nsga2(gen=gen))
-#         self.pop = self.algo.evolve(self.pop)
-
-
-# class BayesianOptimizationProblem():
-#     '''
-#     pyGMO wrapper for gaussian process regression
-#     '''
-
-#     def __init__(self, mogp):
-#         self.mogp = mogp
-#         self.bounds = mogp.bounds
-
-#     def fitness(self, x):
-#         ei = self.mogp.expected_improvement(x)
-#         return - ei
-
-#     def get_bounds(self):
-#         return self.bounds
-
-#     def get_nobj(self):
-#         return self.mogp.n_obj
-
-#     def set_bounds(self, bounds):
-#         self.bounds = bounds
-#         return
