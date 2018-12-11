@@ -1,10 +1,9 @@
 import numpy as np
 import sklearn.gaussian_process as gp
-
-from scipy.stats import norm
-from scipy.optimize import minimize
 import multiprocessing as mp
-import copy
+from scipy.stats import norm
+# from scipy.optimize import minimize
+# import copy
 # from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
 # from scipy import integrate
 
