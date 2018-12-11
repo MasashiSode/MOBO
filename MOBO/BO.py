@@ -126,7 +126,7 @@ class BayesianOptimizationProblem():
 
     def fitness(self, x):
         ei = self.mogp.expected_improvement(x)
-        return - ei
+        return -ei
 
     def get_bounds(self):
         return self.bounds
