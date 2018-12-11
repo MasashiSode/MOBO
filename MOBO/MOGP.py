@@ -1,7 +1,11 @@
+import collections
 import numpy as np
 import sklearn.gaussian_process as gp
 import multiprocessing as mp
+import pygmo as pg
 from scipy.stats import norm
+
+
 # from scipy.optimize import minimize
 # import copy
 # from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
@@ -55,6 +59,7 @@ class MOGP():
         self.n_params = 0
         self.n_obj = 0
         self.gpr = None
+        self.bounds = 0
         self.n_multiprocessing = mp.cpu_count()
         return
 
@@ -80,6 +85,8 @@ class MOGP():
         self.n_features = x_observed.shape[0]
         self.n_params = x_observed.shape[1]
         self.n_obj = y_observed.shape[1]
+        self.bounds = ([min(x_observed[0]), min(x_observed[1])],
+                       [max(x_observed[0]), max(x_observed[1])])
         self.optimum_direction = -1 * np.ones(self.n_obj)
         return
 
@@ -93,8 +100,10 @@ class MOGP():
             direction_list = [-1, 1, -1]
             mogp.set_optimum_direction(direction_list)
         '''
-        if type(direction_list) is not list:
-            raise ValueError
+
+        if isinstance(direction_list, collections.Iterable) == False:
+            print(direction_list, 'is not iterable')
+
         if len(direction_list) != self.n_obj:
             print('len(direction_list != n_obj')
             raise ValueError
@@ -198,7 +207,7 @@ class MOGP():
         Expected improvement function.
 
         Arguments:
-            x (array-like): shape = [n_samples, n_hyperparams]
+            x (array-like): shape = [n_samples, n_params]
 
         Examples::
 
@@ -207,6 +216,7 @@ class MOGP():
             print(ei)
 
         """
+        x = x.reshape(-1, self.n_params)
 
         if self.n_obj == 1:
             mu, sigma = self.gpr.predict(x, return_std=True)
@@ -293,3 +303,33 @@ class MOGP():
 
         print('this funcion is under construction, use another fucntion')
         return
+
+#     def run(self, size=48, gen=100):
+#         self.prob = pg.problem(BayesianOptimizationProblem(self.mogp))
+#         self.pop = pg.population(self.prob, size=size)
+#         self.algo = pg.algorithm(pg.nsga2(gen=gen))
+#         self.pop = self.algo.evolve(self.pop)
+
+
+# class BayesianOptimizationProblem():
+#     '''
+#     pyGMO wrapper for gaussian process regression
+#     '''
+
+#     def __init__(self, mogp):
+#         self.mogp = mogp
+#         self.bounds = mogp.bounds
+
+#     def fitness(self, x):
+#         ei = self.mogp.expected_improvement(x)
+#         return - ei
+
+#     def get_bounds(self):
+#         return self.bounds
+
+#     def get_nobj(self):
+#         return self.mogp.n_obj
+
+#     def set_bounds(self, bounds):
+#         self.bounds = bounds
+#         return

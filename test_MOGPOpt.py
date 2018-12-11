@@ -1,6 +1,9 @@
 import MOBO
 import numpy as np
 # import multiprocessing as mp
+import pygmo as pg
+# from pygmo.problem import base
+from matplotlib import pyplot as plt
 
 
 def ReadInput(InputFile):
@@ -9,20 +12,12 @@ def ReadInput(InputFile):
 
 
 if __name__ == "__main__":
-    # mp.freeze_support()
     y_observed = ReadInput('InputObj.csv')
     x_observed = ReadInput('InputVar.csv')
 
-    mogp = MOBO.MOGP()
-    mogp.set_train_data(x_observed, y_observed)
-    # Mogp.set_number_of_cpu_core(1)
-    mogp.train()
-
-    x = np.array([-5, -5])
-    mu, sigma = mogp.predict(x)
-    print('mu: ', mu)
-    print('sigma: ', sigma)
-
-    x = np.array([[-4.9, -4.9]])
-    ei = mogp.expected_improvement(x)
-    print(ei)
+    mobo = MOBO.MultiObjectiveBayesianOptimization()
+    mobo.set_train_data(x_observed, y_observed)
+    mobo.train_GPModel()
+    mobo.run()
+    ax = pg.plot_non_dominated_fronts(mobo.pop.get_f())
+    plt.show()

@@ -1,1 +1,3 @@
-from .MOBO import MOGP
+# from .MOGP import MOGP
+from .BO import MultiObjectiveBayesianOptimization
+from .MOGP import MOGP
