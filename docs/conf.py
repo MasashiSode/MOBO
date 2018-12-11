@@ -14,7 +14,6 @@
 #
 # import os
 # import sys
-# sys.path.insert(0, 'C:\Users\Masashi\OneDrive\Research\MOGPOpt\MOBO\')
 
 import sphinx_rtd_theme
 from recommonmark.transform import AutoStructify
