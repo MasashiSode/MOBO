@@ -1,1 +1,1 @@
-from .MOGP import MOGP
+from .MOBO import MOGP
