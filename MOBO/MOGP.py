@@ -58,12 +58,14 @@ class MOGP():
         self.n_features = 0
         self.n_params = 0
         self.n_obj = 0
+        self.n_cons = 0
         self.gpr = None
         self.bounds = 0
+        self.flag_cons = False
         self.n_multiprocessing = mp.cpu_count()
         return
 
-    def set_train_data(self, x_observed, y_observed):
+    def set_train_data(self, x_observed, y_observed, n_cons=0):
         '''
         Args:
             x_observed: np.array (n_samples, n_params)
@@ -79,12 +81,15 @@ class MOGP():
             raise ValueError
         if not isinstance(y_observed, np.ndarray):
             raise ValueError
+        if n_cons is not 0:
+            self.flag_cons = True
 
         self.objective_function_observed = y_observed
         self.design_variables_observed = x_observed
         self.n_features = x_observed.shape[0]
         self.n_params = x_observed.shape[1]
-        self.n_obj = y_observed.shape[1]
+        self.n_obj = y_observed.shape[1] - n_cons
+        self.n_cons = n_cons
         self.bounds = ([min(x_observed[0]), min(x_observed[1])],
                        [max(x_observed[0]), max(x_observed[1])])
         self.optimum_direction = -1 * np.ones(self.n_obj)
@@ -218,27 +223,9 @@ class MOGP():
         """
         x = x.reshape(-1, self.n_params)
 
-        if self.n_obj == 1:
-            mu, sigma = self.gpr.predict(x, return_std=True)
-
-            if self.optimum_direction[0] == 1:
-                self.f_ref = np.max(self.objective_function_observed)
-                if mu < self.f_ref:
-                    return 0
-            else:
-                self.f_ref = np.min(self.objective_function_observed)
-                if mu > self.f_ref:
-                    return 0
-
-            # In case sigma equals zero
-            with np.errstate(divide='ignore'):
-                Z = (mu - self.f_ref) / sigma
-                ei_x = \
-                    (mu - self.f_ref) * norm.cdf(Z) + sigma * norm.pdf(Z)
-                # expected_improvement[sigma == 0.0] == 0.0
-
-            return - 1 * ei_x
-
+        if self.flag_cons is True:
+            constrained_ei_x = self.constrained_EI(x)
+            return -1 * constrained_ei_x
         else:
             mu = np.zeros(self.n_obj)
             sigma = np.zeros(self.n_obj)
@@ -254,17 +241,9 @@ class MOGP():
                 if self.optimum_direction[i_obj] == 1:
                     self.f_ref[i_obj] = np.max(
                         self.objective_function_observed[:, i_obj])
-                    # if mu[i_obj] < self.f_ref[i_obj]:
-                    #     ei_x[i_obj] = 0
-                    #     continue
-
                 else:
                     self.f_ref[i_obj] = np.min(
                         self.objective_function_observed[:, i_obj])
-                    # if mu[i_obj] > self.f_ref[i_obj]:
-                    #     ei_x[i_obj] = 0
-                    #     continue
-
                 # In case sigma equals zero
                 with np.errstate(divide='ignore'):
                     Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
@@ -272,25 +251,8 @@ class MOGP():
                         (mu[i_obj] - self.f_ref[i_obj]) * \
                         norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
                     ei_x[sigma[i_obj] == 0.0] == 0.0
-
-                # temp1 = float(mu[i_obj])
-                # temp2 = float(sigma[i_obj])
-                # ei_x[i_obj] = integrate.quad(
-                #     self.ei_func, -np.inf, self.f_ref[i_obj],
-                #     args=(temp1, temp2, i_obj))
-
-            return ei_x
+            return -1 * ei_x
         return
-
-    # def ei_func(self, F, mu, sigma, i_obj):
-    #     temp1 = norm.pdf(F, mu, sigma)
-    #     temp2 = abs(self.f_ref[i_obj] - F)
-    #     out = temp1 * temp2
-    #     # out = \
-    #     #     (abs(self.f_ref[i_obj] - F)) * \
-    #     #     norm.pdf(F, mu, sigma)
-    #     # out = float(out[0])
-    #     return out
 
     def expected_hypervolume_improvement(self, x):
         """ expected_hypervolume_improvement
@@ -303,6 +265,31 @@ class MOGP():
 
         print('this funcion is under construction, use another fucntion')
         return
+
+    def probability_of_feasibility(self, x):
+        """ expected_penalty
+        Expected penalty to calculate the probability of constraints.
+        uses probability of g(x) <= 0. g > 0 is infeasible.
+
+        Note:
+            under construction!
+        """
+        mean, var = self.predict(x)
+        pof = np.ones(self.n_cons)
+        for i_cons in range(self.n_obj, self.n_obj + self.n_cos):
+            pof[i_cons] = norm.cdf(0, loc=mean[i_cons], scale=var[i_cons])
+        # print('this funcion is under construction, use another fucntion')
+        return pof
+
+    def constrained_EI(self, x):
+        '''
+        uses probability of g(x) <= 0. g > 0 is infeasible.
+        '''
+        ei = self.expected_improvement(x)
+        pof = self.probability_of_feasibility(x)
+        pof_all = np.prod(pof)
+        cei = ei * pof_all
+        return cei
 
 #     def run(self, size=48, gen=100):
 #         self.prob = pg.problem(BayesianOptimizationProblem(self.mogp))
