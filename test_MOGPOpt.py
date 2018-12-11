@@ -24,5 +24,3 @@ if __name__ == "__main__":
     mobo.run_kmeans()
     print(mobo.kmeans_centroids)
 
-    # ax = pg.plot_non_dominated_fronts(mobo.pop.get_f())
-    # plt.show()
