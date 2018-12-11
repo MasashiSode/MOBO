@@ -1,4 +1,4 @@
-# MOBO (Multi-Objective Bayesian Optimization)
+# MOGP (Multi-Objective Gaussian Process)
 
 ## Install
 
