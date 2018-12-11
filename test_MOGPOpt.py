@@ -18,6 +18,10 @@ if __name__ == "__main__":
     mobo = MOBO.MultiObjectiveBayesianOptimization()
     mobo.set_train_data(x_observed, y_observed)
     mobo.train_GPModel()
-    mobo.run()
+    mobo.run_moga()
+
+    ndf, dl, dc, ndr = pg.fast_non_dominated_sorting(mobo.pop.get_f())
+    print(ndf, dc, ndr)
+
     ax = pg.plot_non_dominated_fronts(mobo.pop.get_f())
     plt.show()
