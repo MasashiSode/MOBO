@@ -1,5 +1,5 @@
 import numpy as np
-import MOBO
+import MOGP
 # import multiprocessing as mp
 # import pygmo as pg
 # from pygmo.problem import base
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     y_observed = ReadInput('InputObj.csv')
     x_observed = ReadInput('InputVar.csv')
 
-    mobo = MOBO.MultiObjectiveBayesianOptimization()
+    mobo = MOGP.MultiObjectiveBayesianOptimization()
     mobo.set_train_data(x_observed, y_observed, n_cons=0)
 
     # training Gaussian Process regression

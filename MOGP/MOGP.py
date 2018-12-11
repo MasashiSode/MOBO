@@ -2,7 +2,6 @@ import collections
 import numpy as np
 import sklearn.gaussian_process as gp
 import multiprocessing as mp
-import pygmo as pg
 from scipy.stats import norm
 
 
@@ -41,7 +40,7 @@ class MOGP():
 
     Example::
 
-        mogp = MOGPOpt.MOGP()
+        mogp = MOGP.MOGP()
         mogp.set_train_data(x_observed, y_observed)
         mogp.train()
         x = np.array([[-5, -5]])
@@ -63,6 +62,7 @@ class MOGP():
         self.bounds = 0
         self.flag_cons = False
         self.n_multiprocessing = mp.cpu_count()
+        self.optimum_direction = -1 * np.ones(self.n_obj)
         return
 
     def set_train_data(self, x_observed, y_observed, n_cons=0):
@@ -73,7 +73,7 @@ class MOGP():
 
         Example::
 
-            mogp = MOGPOpt.MOGP()
+            mogp = MOGP.MOGP()
             mogp.set_train_data(x_observed, y_observed)
 
         '''
@@ -231,34 +231,33 @@ class MOGP():
         if self.flag_cons is True:
             constrained_ei_x = self.constrained_EI(x)
             return constrained_ei_x
-        else:
-            mu = np.zeros(self.n_obj)
-            sigma = np.zeros(self.n_obj)
-            ei_x = np.zeros(self.n_obj)
-            self.f_ref = np.zeros(self.n_obj)
 
-            for i_obj in range(0, self.n_obj):
-                temp1, temp2 = \
-                    self.gpr[i_obj].predict(x, return_std=True)
-                mu[i_obj] = temp1[0]
-                sigma[i_obj] = temp2[0]
+        mu = np.zeros(self.n_obj)
+        sigma = np.zeros(self.n_obj)
+        ei_x = np.zeros(self.n_obj)
+        self.f_ref = np.zeros(self.n_obj)
 
-                if self.optimum_direction[i_obj] == 1:
-                    self.f_ref[i_obj] = np.max(
-                        self.objective_function_observed[:, i_obj])
-                else:
-                    self.f_ref[i_obj] = np.min(
-                        self.objective_function_observed[:, i_obj])
+        for i_obj in range(0, self.n_obj):
+            temp1, temp2 = \
+                self.gpr[i_obj].predict(x, return_std=True)
+            mu[i_obj] = temp1[0]
+            sigma[i_obj] = temp2[0]
 
-                # In case sigma equals zero
-                with np.errstate(divide='ignore'):
-                    Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
-                    ei_x[i_obj] = \
-                        (mu[i_obj] - self.f_ref[i_obj]) * \
-                        norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
-                    ei_x[sigma[i_obj] == 0.0] == 0.0
-            return ei_x
-        return
+            if self.optimum_direction[i_obj] == 1:
+                self.f_ref[i_obj] = np.max(
+                    self.objective_function_observed[:, i_obj])
+            else:
+                self.f_ref[i_obj] = np.min(
+                    self.objective_function_observed[:, i_obj])
+
+            # In case sigma equals zero
+            with np.errstate(divide='ignore'):
+                Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
+                ei_x[i_obj] = \
+                    (mu[i_obj] - self.f_ref[i_obj]) * \
+                    norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
+                ei_x[sigma[i_obj] == 0.0] == 0.0
+        return ei_x
 
     def expected_hypervolume_improvement(self, x):
         """ expected_hypervolume_improvement

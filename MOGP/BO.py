@@ -1,7 +1,7 @@
-import MOBO
+import MOGP
 import numpy as np
 # import multiprocessing as mp
-import pygmo as pg
+import pygmo
 # from pygmo.problem import base
 import sklearn.gaussian_process as gp
 from sklearn.cluster import KMeans as km
@@ -73,7 +73,7 @@ class MultiObjectiveBayesianOptimization(object):
         Examples::
 
             cpu = 4
-            mobo.set_number_of_cpu_core(cpu)
+            mogp.set_number_of_cpu_core(cpu)
         '''
 
         if type(n_multiprocessing) is not int:
@@ -85,11 +85,11 @@ class MultiObjectiveBayesianOptimization(object):
         '''
         Examples::
 
-            mobo = MOBO.MultiObjectiveBayesianOptimization()
+            mobo = MOGP.MultiObjectiveBayesianOptimization()
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
         '''
-        self.mogp = MOBO.MOGP()
+        self.mogp = MOGP.MOGP()
         self.mogp.set_train_data(
             self.x_observed, self.y_observed, n_cons=self.n_cons)
         self.mogp.set_optimum_direction(self.optimum_direction)
@@ -109,17 +109,17 @@ class MultiObjectiveBayesianOptimization(object):
 
         Examples::
 
-            mobo = MOBO.MultiObjectiveBayesianOptimization()
+            mobo = MOGP.MultiObjectiveBayesianOptimization()
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
         '''
 
-        self.prob = pg.problem(BayesianOptimizationProblem(self.mogp))
-        self.pop = pg.population(self.prob, size=size)
-        self.algo = pg.algorithm(pg.nsga2(gen=gen))
+        self.prob = pygmo.problem(BayesianOptimizationProblem(self.mogp))
+        self.pop = pygmo.population(self.prob, size=size)
+        self.algo = pygmo.algorithm(pygmo.nsga2(gen=gen))
         self.pop = self.algo.evolve(self.pop)
 
-        self.non_dominated_fronts, self.domination_list, self.domination_count, self.non_domination_ranks = pg.fast_non_dominated_sorting(
+        self.non_dominated_fronts, self.domination_list, self.domination_count, self.non_domination_ranks = pygmo.fast_non_dominated_sorting(
             self.pop.get_f())
         print('moga done.')
         return
@@ -195,7 +195,7 @@ class MultiObjectiveBayesianOptimization(object):
 
         Examples::
 
-            mobo = MOBO.MultiObjectiveBayesianOptimization()
+            mobo = MOGP.MultiObjectiveBayesianOptimization()
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
 
@@ -259,7 +259,7 @@ if __name__ == "__main__":
     y_observed = ReadInput('InputObj.csv')
     x_observed = ReadInput('InputVar.csv')
 
-    mogp = MOBO.MOGP()
+    mogp = MOGP.MOGP()
     mogp.set_train_data(x_observed, y_observed)
     # Mogp.set_number_of_cpu_core(1)
     mogp.train()
@@ -273,12 +273,12 @@ if __name__ == "__main__":
     ei = mogp.expected_improvement(x)
     print(ei)
 
-    prob = pg.problem(my_mo_problem(mogp))
+    prob = pygmo.problem(my_mo_problem(mogp))
     print(prob)
-    pop = pg.population(prob, size=40)
-    algo = pg.algorithm(pg.nsga2(gen=10))
+    pop = pygmo.population(prob, size=40)
+    algo = pygmo.algorithm(pygmo.nsga2(gen=10))
     pop = algo.evolve(pop)
     # pop.plot_pareto_fronts()
     print(pop)
-    ax = pg.plot_non_dominated_fronts(pop.get_f())
+    ax = pygmo.plot_non_dominated_fronts(pop.get_f())
     plt.show()
