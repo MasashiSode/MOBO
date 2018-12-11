@@ -90,8 +90,8 @@ class MOGP():
         self.n_params = x_observed.shape[1]
         self.n_obj = y_observed.shape[1] - n_cons
         self.n_cons = n_cons
-        self.bounds = ([min(x_observed[0]), min(x_observed[1])],
-                       [max(x_observed[0]), max(x_observed[1])])
+        self.bounds = ([min(x_observed[:, i]) for i in range(0, x_observed.shape[1])],
+                       [max(x_observed[:, i]) for i in range(0, x_observed.shape[1])])
         self.optimum_direction = -1 * np.ones(self.n_obj)
         return
 
@@ -157,7 +157,8 @@ class MOGP():
                 self.gpr = manager.list([None] * self.n_obj)
                 for i_obj in range(0, self.n_obj):
                     self.gpr[i_obj] = \
-                        gp.GaussianProcessRegressor(kernel=kernel, random_state=0)
+                        gp.GaussianProcessRegressor(
+                            kernel=kernel, random_state=0)
 
                 with mp.Pool(self.n_multiprocessing) as p:
                     # p = mp.Pool(self.n_multiprocessing)

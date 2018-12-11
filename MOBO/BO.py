@@ -41,8 +41,8 @@ class MultiObjectiveBayesianOptimization(object):
         self.n_params = x_observed.shape[1]
         self.n_obj = y_observed.shape[1] - n_cons
         self.n_cons = n_cons
-        self.bounds = [[min(x_observed[0]), min(x_observed[1])],
-                       [max(x_observed[0]), max(x_observed[1])]]
+        self.bounds = ([min(x_observed[:, i]) for i in range(0, x_observed.shape[1])],
+                       [max(x_observed[:, i]) for i in range(0, x_observed.shape[1])])
         self.optimum_direction = -1 * np.ones(self.n_obj)
         return
 
@@ -119,15 +119,14 @@ class MultiObjectiveBayesianOptimization(object):
         self.algo = pg.algorithm(pg.nsga2(gen=gen))
         self.pop = self.algo.evolve(self.pop)
 
-        self.non_dominated_fronts, self.domination_list, self.domination_count, self.non_domination_ranks = \
-            pg.fast_non_dominated_sorting(
-                self.pop.get_f())
+        self.non_dominated_fronts, self.domination_list, self.domination_count, self.non_domination_ranks = pg.fast_non_dominated_sorting(
+            self.pop.get_f())
         print('moga done.')
         return
 
     def run_kmeans(self, n_clusters=8, init='k-means++', n_init=10, max_iter=300,
-               tol=0.0001, precompute_distances='auto', verbose=0,
-               random_state=None, copy_x=True, n_jobs=1):
+                   tol=0.0001, precompute_distances='auto', verbose=0,
+                   random_state=None, copy_x=True, n_jobs=1):
         '''
         clustering parate front solutions by k-means
 

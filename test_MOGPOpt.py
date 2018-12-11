@@ -1,5 +1,5 @@
-import MOBO
 import numpy as np
+import MOBO
 # import multiprocessing as mp
 # import pygmo as pg
 # from pygmo.problem import base
