@@ -4,10 +4,10 @@ from setuptools import setup, find_packages
 #     sys.exit('Sorry, Python >= 3.7 is not supported')
 
 setup(
-    name='MOBO',
+    name='MOGP',
     python_requires='<3.7',
     version='0.0.1',
-    description='Sample package for Python-Guide.org',
+    description='Multi-objective gaussian process package',
     # long_description=readme,
     author='Masashi Sode',
     author_email='masashi.sode@gmail.com',

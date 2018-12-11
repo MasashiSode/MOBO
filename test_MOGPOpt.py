@@ -1,9 +1,5 @@
 import numpy as np
 import MOGP
-# import multiprocessing as mp
-# import pygmo as pg
-# from pygmo.problem import base
-# from matplotlib import pyplot as plt
 
 
 def ReadInput(InputFile):
