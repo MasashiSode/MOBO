@@ -1,5 +1,5 @@
 import numpy as np
-import MOGP_test as MOGP
+import MOGP as MOGP
 import matplotlib.pyplot as plt
 
 
