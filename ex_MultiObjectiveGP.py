@@ -26,7 +26,7 @@ if __name__ == "__main__":
     x_observed = ReadInput('ZDT1_var.csv')
     # y_observed: np.array (n_samples, n_obj + n_cons)
     y_observed = ReadInput('ZDT1_obj.csv')
-    n_iter = 5
+    n_iter = 10
     n_new_ind = 8
     size = 100
     gen = 50
