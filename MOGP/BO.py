@@ -14,8 +14,6 @@ class MultiObjectiveBayesianOptimization(object):
         self.mogp = None
         self.n_multiprocessing = mp.cpu_count()
 
-        pass
-
     def set_train_data(self, x_observed, y_observed, n_cons=0):
         '''
         Args:
@@ -119,8 +117,8 @@ class MultiObjectiveBayesianOptimization(object):
         self.algo = pygmo.algorithm(pygmo.nsga2(gen=gen))
         self.pop = self.algo.evolve(self.pop)
 
-        self.non_dominated_fronts, self.domination_list, self.domination_count, self.non_domination_ranks = pygmo.fast_non_dominated_sorting(
-            self.pop.get_f())
+        self.non_dominated_fronts, self.domination_list, self.domination_count, self.non_domination_ranks = \
+            pygmo.fast_non_dominated_sorting(self.pop.get_f())
         print('moga done.')
         return
 
