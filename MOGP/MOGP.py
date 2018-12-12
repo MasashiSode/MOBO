@@ -287,10 +287,33 @@ class MOGP():
         '''
         uses probability of g(x) <= 0. g > 0 is infeasible.
         '''
-        print('constrained_EI: this funcion is under construction')
-        raise
 
-        ei = self.expected_improvement(x)  # ToDo make another EI func
+        mu = np.zeros(self.n_obj)
+        sigma = np.zeros(self.n_obj)
+        ei = np.zeros(self.n_obj)
+        self.f_ref = np.zeros(self.n_obj)
+
+        for i_obj in range(0, self.n_obj):
+            temp1, temp2 = \
+                self.gpr[i_obj].predict(x, return_std=True)
+            mu[i_obj] = temp1[0]
+            sigma[i_obj] = temp2[0]
+
+            if self.optimum_direction[i_obj] == 1:
+                self.f_ref[i_obj] = np.max(
+                    self.objective_function_observed[:, i_obj])
+            else:
+                self.f_ref[i_obj] = np.min(
+                    self.objective_function_observed[:, i_obj])
+
+            # In case sigma equals zero
+            with np.errstate(divide='ignore'):
+                Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
+                ei_x[i_obj] = \
+                    (mu[i_obj] - self.f_ref[i_obj]) * \
+                    norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
+                ei[sigma[i_obj] == 0.0] == 0.0
+
         pof = self.probability_of_feasibility(x)
         pof_all = np.prod(pof)
         cei = ei * pof_all
