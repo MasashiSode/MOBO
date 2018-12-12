@@ -8,6 +8,8 @@ validation not done
 
 ## Usage
 
+see also https://github.com/MasashiSode/MOGP/tree/master/examples
+
 ```python
 import numpy as np
 import MOGP
@@ -39,8 +41,6 @@ if __name__ == "__main__":
 
 
 ```
-
-under construction
 
 ## ToDo
 
