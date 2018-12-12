@@ -280,19 +280,18 @@ class MOGP():
         pof = np.ones(self.n_cons)
         for i_cons in range(self.n_obj, self.n_obj + self.n_cos):
             pof[i_cons] = norm.cdf(0, loc=mean[i_cons], scale=var[i_cons])
-        print('this funcion is under construction, use another fucntion')
+        print('probability_of_feasibility: this funcion is under construction')
         return pof
 
     def constrained_EI(self, x):
         '''
         uses probability of g(x) <= 0. g > 0 is infeasible.
         '''
-        print('this funcion is under construction, use another fucntion')
+        print('constrained_EI: this funcion is under construction')
         raise
 
         ei = self.expected_improvement(x)  # ToDo make another EI func
         pof = self.probability_of_feasibility(x)
         pof_all = np.prod(pof)
         cei = ei * pof_all
-        print('this funcion is under construction, use another fucntion')
         return cei
