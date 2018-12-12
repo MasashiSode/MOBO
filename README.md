@@ -1,4 +1,6 @@
 # MOGP (Multi-Objective Gaussian Process)
+this package is under construction
+validation not done
 
 ## Install
 
