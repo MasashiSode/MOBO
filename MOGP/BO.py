@@ -87,6 +87,7 @@ class MultiObjectiveBayesianOptimization(object):
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
         '''
+        print('training running...')
         self.mogp = MOGP.MOGP()
         self.mogp.set_train_data(
             self.x_observed, self.y_observed, n_cons=self.n_cons)
@@ -111,7 +112,7 @@ class MultiObjectiveBayesianOptimization(object):
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
         '''
-
+        print('moga running...')
         self.prob = pygmo.problem(BayesianOptimizationProblem(self.mogp))
         self.pop = pygmo.population(self.prob, size=size)
         self.algo = pygmo.algorithm(pygmo.nsga2(gen=gen))
