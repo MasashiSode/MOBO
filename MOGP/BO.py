@@ -20,7 +20,7 @@ class MultiObjectiveBayesianOptimization(object):
         '''
         Args:
             x_observed: np.array (n_samples, n_params)
-            y_observed: np.array (n_samples, n_obj)
+            y_observed: np.array (n_samples, n_obj + n_cons)
 
         Example::
 
