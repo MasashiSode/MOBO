@@ -3,6 +3,7 @@ import numpy as np
 import sklearn.gaussian_process as gp
 import multiprocessing as mp
 from scipy.stats import norm
+import copy
 
 
 # from scipy.optimize import minimize
@@ -84,8 +85,8 @@ class MOGP():
         if n_cons is not 0:
             self.flag_cons = True
 
-        self.y_observed = y_observed
-        self.x_observed = x_observed
+        self.y_observed = copy.deepcopy(y_observed)
+        self.x_observed = copy.deepcopy(x_observed)
         self.n_features = x_observed.shape[0]
         self.n_params = x_observed.shape[1]
         self.n_obj = y_observed.shape[1] - n_cons
