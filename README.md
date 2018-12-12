@@ -45,6 +45,7 @@ if __name__ == "__main__":
 ## ToDo
 
 - validation
+    - zdt1: done
 - constraints handling
 - EHVI handling
 - test code
