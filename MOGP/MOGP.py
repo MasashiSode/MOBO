@@ -252,11 +252,11 @@ class MOGP():
 
             # In case sigma equals zero
             with np.errstate(divide='ignore'):
-                Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
+                Z = (self.f_ref[i_obj] - mu[i_obj]) / sigma[i_obj]
                 ei_x[i_obj] = \
-                    (mu[i_obj] - self.f_ref[i_obj]) * \
+                    (self.f_ref[i_obj] - mu[i_obj]) * \
                     norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
-                ei_x[sigma[i_obj] == 0.0] == 0.0
+                ei_x[sigma[i_obj] == 0.0] = 0.0
         return ei_x
 
     def expected_hypervolume_improvement(self, x):
