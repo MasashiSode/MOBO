@@ -23,4 +23,3 @@ if __name__ == "__main__":
     # clustering pareto front solutions
     mobo.run_kmeans()
     print(mobo.kmeans_centroids)
-
