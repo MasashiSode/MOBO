@@ -290,7 +290,8 @@ class MultiObjectiveBayesianOptimization(object):
         Args:
             func:
                 multi objective function you want to minimize.
-                y = f(x, agrs=[])
+                y = f(x, agrs=[])\
+                0 <= x[i] <=1
 
             args (list):
                 parameters for the function.
