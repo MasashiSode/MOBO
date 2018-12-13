@@ -1,5 +1,6 @@
 # https://sop.tik.ee.ethz.ch/download/supplementary/testproblems/
 import numpy as np
+import copy
 
 
 class ZDT(object):
@@ -108,3 +109,16 @@ class ZDT(object):
             g[i] = 1 + 9 * (sum(x[i, 1:]) / (n_dv - 1)) ** 0.25
             h[i] = 1 - (f1[i] / g[i]) ** 2
         return [f1, h]
+
+
+def BinhKornFunction(x, args=[]):
+
+    x_in = copy.deepcopy(x)
+    x_in[:, 0] = x_in[:, 0] * 5
+    x_in[:, 1] = x_in[:, 1] * 3
+
+    f1 = 4 * x_in[:, 0] ** 2 + 4 * x_in[:, 1] ** 2
+    f2 = (x_in[:, 0] - 5) ** 2 + (x_in[:, 1] - 5) ** 2
+    g1 = (x_in[:, 0] - 5) ** 2 + x_in[:, 1] ** 2 - 25
+    g2 = 7.7 - (x_in[:, 0] - 8) ** 2 + (x_in[:, 1] + 3) ** 2
+    return [f1, f2, g1, g2]

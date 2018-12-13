@@ -60,6 +60,7 @@ class MOGP():
         self.n_params = 0
         self.n_obj = 0
         self.n_cons = 0
+        self.n_obj_cons = 0
         self.gpr = None
         self.bounds = 0
         self.flag_cons = False
@@ -90,6 +91,7 @@ class MOGP():
         self.x_observed = copy.deepcopy(x_observed)
         self.n_features = x_observed.shape[0]
         self.n_params = x_observed.shape[1]
+        self.n_obj_cons = y_observed.shape[1]
         self.n_obj = y_observed.shape[1] - n_cons
         self.n_cons = n_cons
 
@@ -182,8 +184,8 @@ class MOGP():
         else:
             # manager.list shares list in the multi-processing
             with mp.Manager() as manager:
-                self.gpr = manager.list([None] * self.n_obj)
-                for i_obj in range(0, self.n_obj):
+                self.gpr = manager.list([None] * self.n_obj_cons)
+                for i_obj in range(0, self.n_obj_cons):
                     self.gpr[i_obj] = \
                         gp.GaussianProcessRegressor(
                             kernel=kernel, random_state=0,
@@ -235,9 +237,9 @@ class MOGP():
         if self.n_obj == 1:
             mu, sigma = self.gpr.predict(x, return_std=True)
         else:
-            mu = np.zeros(self.n_obj)
-            sigma = np.zeros(self.n_obj)
-            for i_obj in range(0, self.n_obj):
+            mu = np.zeros(self.n_obj_cons)
+            sigma = np.zeros(self.n_obj_cons)
+            for i_obj in range(0, self.n_obj_cons):
                 temp1, temp2 = \
                     self.gpr[i_obj].predict(x, return_std=True)
                 mu[i_obj] = temp1[0]
@@ -350,10 +352,12 @@ class MOGP():
         Expected penalty to calculate the probability of constraints.
         uses probability of g(x) <= 0. g > 0 is infeasible.
         """
-        mean, var = self.predict(x)
         pof = np.ones(self.n_cons)
-        for i_cons in range(self.n_obj, self.n_obj + self.n_cos):
-            pof[i_cons] = norm.cdf(0, loc=mean[i_cons], scale=var[i_cons])
+        i = 0
+        for i_cons in range(self.n_obj, self.n_obj_cons):
+            mu, var = self.gpr[i_cons].predict(x, return_std=True)
+            pof[i] = norm.cdf(0, loc=mu[0], scale=var[0])
+            i = i + 1
         return pof
 
     def constrained_EI(self, x):

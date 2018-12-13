@@ -280,7 +280,7 @@ class MultiObjectiveBayesianOptimization(object):
         return
 
     def run_mobo(self, func=None, args=[],
-                 n_dv=0, n_obj=0,
+                 n_dv=0, n_obj_cons=0,
                  n_init_lhs_samples=24,
                  n_iter=10, n_new_ind=16,
                  ga_pop_size=100, ga_gen=50, n_cons=0):
@@ -324,8 +324,8 @@ class MultiObjectiveBayesianOptimization(object):
 
         # latin hyper cube sampling
         x_observed = lhs(n_dv, samples=n_init_lhs_samples)
-        y_observed = np.zeros((n_init_lhs_samples, n_obj))
-        y_observed[:, 0], y_observed[:, 1] = func(x=x_observed, args=args)
+        # y_observed = np.zeros((n_init_lhs_samples, n_obj_cons))
+        y_observed = np.array(func(x=x_observed, args=args)).T
 
         for i in range(0, n_iter):
             print('\n--- iter: ', i, '/', n_iter - 1, '---')
@@ -345,9 +345,8 @@ class MultiObjectiveBayesianOptimization(object):
             # evaluate new points
             print('function evaluation')
             new_indv_x = self.kmeans_centroids_original_coor_x
-            new_indv_y = np.zeros((new_indv_x.shape[0], 2))
-            new_indv_y[:, 0], new_indv_y[:, 1] = \
-                func(x=new_indv_x, args=args)
+            new_indv_y = np.zeros((new_indv_x.shape[0], n_obj_cons))
+            y = np.array(func(x=new_indv_x, args=args)).T
             print('function evaluation done.')
 
             # update observed values
