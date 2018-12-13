@@ -284,11 +284,42 @@ class MultiObjectiveBayesianOptimization(object):
                  n_init_lhs_samples=24,
                  n_iter=10, n_new_ind=16,
                  ga_pop_size=100, ga_gen=50, n_cons=0):
+        '''
+        runs multi-objective bayesian optimization
 
-        # n_dv = func.get_n_dv()
-        # n_obj = func.get_n_obj()
+        Args:
+            func:
+                multi objective function you want to minimize.
+                y = f(x, agrs=[])
 
-        # func = zdt.get_func(n_zdt)
+            args (list):
+                parameters for the function.
+
+            n_dv (int):
+                number of design variabels
+
+            n_obj (int):
+                number of objective functions
+                n_init_lhs_sampling (int):
+                initial population of bayesian optimization
+
+            n_iter (int):
+                number of iteration of bayesian optimization
+                n_new_ind (int): number of new indivisuals in each iteration.
+
+            ga_pop_size (int):
+                population size of multi
+                objective genetic algorithm (NSGA2)
+                ga_pop_size must be multiply number of four.
+
+            ga_gen (int):
+                generation number of
+                multi objective genetic algorithm (NSGA2)
+
+            n_cons (int):
+                number of constraints functions
+
+        '''
 
         # latin hyper cube sampling
         x_observed = lhs(n_dv, samples=n_init_lhs_samples)
