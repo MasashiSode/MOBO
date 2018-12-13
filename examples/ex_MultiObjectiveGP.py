@@ -116,12 +116,12 @@ class ZDT(object):
 if __name__ == "__main__":
     n_zdt = 6
 
-    n_init_lhs_samples = 500
+    n_init_lhs_samples = 24
 
     n_dv = 2
     n_obj = 2
 
-    n_iter = 20
+    n_iter = 10
     n_new_ind = 16
 
     ga_pop_size = 100
@@ -154,10 +154,12 @@ if __name__ == "__main__":
         mobo.run_kmeans(n_clusters=n_new_ind, n_jobs=-1, n_init=20)
 
         # evaluate new points
+        print('function evaluation')
         new_indv_x = mobo.kmeans_centroids_original_coor_x
         new_indv_y = np.zeros((new_indv_x.shape[0], 2))
         new_indv_y[:, 0], new_indv_y[:, 1] = \
             func(new_indv_x)
+        print('function evaluation done.')
 
         # update observed values
         x_observed = np.concatenate([x_observed, new_indv_x], axis=0)
