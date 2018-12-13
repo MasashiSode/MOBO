@@ -7,7 +7,7 @@ from pyDOE import lhs
 if __name__ == "__main__":
     n_zdt = 2
 
-    n_init_lhs_samples = 24
+    n_init_lhs_samples = 48
 
     n_dv = 2
     n_obj = 2
