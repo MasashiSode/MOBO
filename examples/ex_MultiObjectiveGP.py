@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # y_observed: np.array (n_samples, n_obj + n_cons)
     y_observed = ReadInput('ZDT1_obj.csv')
     n_iter = 10
-    n_new_ind = 8
+    n_new_ind = 16
     size = 100
     gen = 50
 
@@ -50,6 +50,16 @@ if __name__ == "__main__":
 
         x_observed = np.concatenate([x_observed, new_indv_x], axis=0)
         y_observed = np.concatenate([y_observed, new_indv_y], axis=0)
+
+        input_observed = np.concatenate([x_observed, y_observed], axis=1)
+        input_observed, indeices = \
+            np.unique(input_observed, axis=0, return_inverse=True)
+        input_observed = input_observed[indeices]
+
+        x_observed = input_observed[:, 0:x_observed.shape[1]]
+        y_observed = \
+            input_observed[:, x_observed.shape[1]:x_observed.shape[1] +
+                           y_observed.shape[1] + 1]
 
     np.savetxt('ZDT1_obj_opt.csv', y_observed, delimiter=',')
     np.savetxt('ZDT1_var_opt.csv', x_observed, delimiter=',')
