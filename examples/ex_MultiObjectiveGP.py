@@ -9,12 +9,14 @@ class ZDT(object):
         self.func = [self.ZDT1,
                      self.ZDT2,
                      self.ZDT3,
-                     self.ZDT4,
-                     self.ZDT5,
+                     None,
+                     None,
                      self.ZDT6]
         return
 
     def get_obj_values(self, x, n_zdt=1):
+        if n_zdt == 5 or n_zdt == 4:
+            raise ValueError
         self.n_zdt = n_zdt - 1
         return self.func[self.n_zdt](x)
 
@@ -59,36 +61,37 @@ class ZDT(object):
                 (x[i, 0] / g[i]) * np.sin(10 * np.pi * x[i, 0])
         return [x[:, 0], g * h]
 
-    def ZDT4(self, x):
-        # m = 10 , x_1 in [0,1] , x_2,...,x_m in [-5,5]
-        n_samples = x.shape[0]
-        n_dv = x.shape[1]
+    # def ZDT4(self, x):
+    #     # m = 10 , x_1 in [0,1] , x_2,...,x_m in [-5,5]
+    #     n_samples = x.shape[0]
+    #     n_dv = x.shape[1]
 
-        g = np.zeros(n_samples)
-        h = np.zeros(n_samples)
-        for i in range(0, n_samples):
-            g[i] = 1 + 10 * (n_dv - 1) + \
-                sum([(t ** 2 - 10 * np.cos(4 * np.pi * t)) for t in x[i, 1:]])
-            h[i] = 1 - np.sqrt(x[i, 0] / g[i])
-        return [x[:, 0], g * h]
+    #     g = np.zeros(n_samples)
+    #     h = np.zeros(n_samples)
+    #     for i in range(0, n_samples):
+    #         g[i] = 1 + 10 * (n_dv - 1) + \
+    #             sum([(t ** 2 - 10 * np.cos(4 * np.pi * t))
+    #                  for t in x[i, 1:]])
+    #         h[i] = 1 - np.sqrt(x[i, 0] / g[i])
+    #     return [x[:, 0], g * h]
 
-    def ZDT5(self, x):
-        # m = 11 , x_1={0,1}^30 , x_2,...,x_m={0,1}^5
-        n_samples = x.shape[0]
+    # def ZDT5(self, x):
+    #     # m = 11 , x_1={0,1}^30 , x_2,...,x_m={0,1}^5
+    #     n_samples = x.shape[0]
 
-        f1 = np.zeros(n_samples)
-        g = np.zeros(n_samples)
-        h = np.zeros(n_samples)
+    #     f1 = np.zeros(n_samples)
+    #     g = np.zeros(n_samples)
+    #     h = np.zeros(n_samples)
 
-        for i in range(0, n_samples):
-            f1[i] = 1 + x[i, 0].count('1')
-            for i in x[i, 1:]:
-                if i.count('1') < 5:
-                    g[i] += 2 + i.count('1')
-                elif i.count('1') == 5:
-                    g[i] += 1
-            h[i] = 1 / f1[i]
-        return [f1, g * h]
+    #     for i in range(0, n_samples):
+    #         f1[i] = 1 + x[i, 0].count('1')
+    #         for i in x[i, 1:]:
+    #             if i.count('1') < 5:
+    #                 g[i] += 2 + i.count('1')
+    #             elif i.count('1') == 5:
+    #                 g[i] += 1
+    #         h[i] = 1 / f1[i]
+    #     return [f1, g * h]
 
     def ZDT6(self, x):
         # m = 10 , x_i in [0,1]
@@ -116,24 +119,24 @@ if __name__ == "__main__":
     # x_observed = ReadInput('ZDT1_var.csv')
     # y_observed: np.array (n_samples, n_obj + n_cons)
     # y_observed = ReadInput('ZDT1_obj.csv')
+    n_zdt = 6
+
+    n_init_lhs_samples = 100
+    n_dv = 2
+    n_obj = 2
+
     n_iter = 10
     n_new_ind = 16
 
     ga_pop_size = 100
     ga_gen = 50
 
-    n_init_samples = 100
-    n_dv = 2
-    n_obj = 2
-
-    n_zdt = 3
-
     zdt = ZDT()
     func = zdt.get_func(n_zdt)
 
     # latin hyper cube sampling
-    x_observed = lhs(n_dv, samples=n_init_samples)
-    y_observed = np.zeros((n_init_samples, n_obj))
+    x_observed = lhs(n_dv, samples=n_init_lhs_samples)
+    y_observed = np.zeros((n_init_lhs_samples, n_obj))
     y_observed[:, 0], y_observed[:, 1] = func(x_observed)
 
     np.savetxt('ZDT' + str(n_zdt) + '_var_init.csv', x_observed, delimiter=',')
