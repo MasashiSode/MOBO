@@ -36,9 +36,23 @@ class MultiObjectiveBayesianOptimization(object):
 
         self.y_observed = copy.deepcopy(y_observed)
         self.x_observed = copy.deepcopy(x_observed)
-        self.n_features = x_observed.shape[0]
-        self.n_params = x_observed.shape[1]
-        self.n_obj = y_observed.shape[1] - n_cons
+
+        # delete duplicate values
+        input_observed = np.concatenate(
+            [self.x_observed, self.y_observed], axis=1)
+        input_observed, indeices = \
+            np.unique(input_observed, axis=0, return_inverse=True)
+        input_observed = input_observed[indeices]
+        self.x_observed = input_observed[:, 0:self.x_observed.shape[1]]
+        self.y_observed = \
+            input_observed[:,
+                           self.x_observed.shape[1]:
+                           self.x_observed.shape[1] +
+                           self.y_observed.shape[1] + 1]
+
+        self.n_features = self.x_observed.shape[0]
+        self.n_params = self.x_observed.shape[1]
+        self.n_obj = self.y_observed.shape[1] - n_cons
         self.n_cons = n_cons
 
         self.x_observed_max = np.zeros(self.n_params)
