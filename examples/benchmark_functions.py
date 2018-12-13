@@ -2,6 +2,7 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+from pyDOE import lhs
 # https://github.com/scitosci/MOCCA-II
 
 
@@ -74,12 +75,11 @@ def ZDT1(x):
 if __name__ == "__main__":
     n_samples = 50
     n_dv = 2
-    x = np.random.rand(n_samples, n_dv)
-    # f1, f2 = sin(x)
+    x = lhs(n_dv, samples=n_samples)
     f1, f2 = ZDT1(x)
     out1 = np.concatenate([[f1], [f2]], axis=0)
-    np.savetxt('ZDT1_obj.csv', out1.T, delimiter=',')
-    np.savetxt('ZDT1_var.csv', x, delimiter=',')
+    np.savetxt('ZDT1_obj_init.csv', out1.T, delimiter=',')
+    np.savetxt('ZDT1_var_init.csv', x, delimiter=',')
     # plt.grid(True)
     # plt.scatter(f1, f2)
     # plt.show()
