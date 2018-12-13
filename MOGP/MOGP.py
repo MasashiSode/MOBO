@@ -168,10 +168,12 @@ class MOGP():
             pass
 
         if self.n_obj == 1:
-            self.gpr = \
-                gp.GaussianProcessRegressor(kernel=kernel, random_state=5).fit(
-                    self.x_observed,
-                    self.y_observed)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                self.gpr = \
+                    gp.GaussianProcessRegressor(kernel=kernel, random_state=5).fit(
+                        self.x_observed,
+                        self.y_observed)
         else:
             # manager.list shares list in the multi-processing
             with mp.Manager() as manager:
@@ -184,7 +186,7 @@ class MOGP():
                 with mp.Pool(self.n_multiprocessing) as p:
                     # p = mp.Pool(self.n_multiprocessing)
                     p.map(MpHelper(self, 'wrapper_mp'),
-                          range(0, self.n_obj))
+                            range(0, self.n_obj))
                     p.close()
                     p.join()
                     self.gpr = [x for x in self.gpr]
@@ -193,9 +195,11 @@ class MOGP():
         return self.gpr
 
     def wrapper_mp(self, i_obj):
-        self.gpr[i_obj] = self.gpr[i_obj].fit(
-            self.x_observed,
-            self.y_observed[:, i_obj])
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            self.gpr[i_obj] = self.gpr[i_obj].fit(
+                self.x_observed,
+                self.y_observed[:, i_obj])
         return
 
     def predict_original_coor(self, x):
