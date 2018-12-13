@@ -50,24 +50,28 @@ class MultiObjectiveBayesianOptimization(object):
         for i in range(0, self.n_params):
             self.x_observed_max[i] = max(self.x_observed[:, i])
             self.x_observed_min[i] = min(self.x_observed[:, i])
-            self.x_observed[:, i] = (self.x_observed[:, i] - self.x_observed_min[i]) / \
+            self.x_observed[:, i] = \
+                (self.x_observed[:, i] - self.x_observed_min[i]) / \
                 (self.x_observed_max[i] - self.x_observed_min[i])
 
         for i in range(0, self.n_obj):
             self.y_observed_max[i] = max(self.y_observed[:, i])
             self.y_observed_min[i] = min(self.y_observed[:, i])
-            self.y_observed[:, i] = (self.y_observed[:, i] - self.y_observed_min[i]) / \
+            self.y_observed[:, i] = \
+                (self.y_observed[:, i] - self.y_observed_min[i]) / \
                 (self.y_observed_max[i] - self.y_observed_min[i])
 
-        self.bounds = ([self.x_observed_min[i] for i in range(0, x_observed.shape[1])],
-                       [self.x_observed_max[i] for i in range(0, x_observed.shape[1])])
+        self.bounds = \
+            ([self.x_observed_min[i] for i in range(0, x_observed.shape[1])],
+             [self.x_observed_max[i] for i in range(0, x_observed.shape[1])])
         self.optimum_direction = -1 * np.ones(self.n_obj)
         return
 
     def set_optimum_direction(self, direction_list):
         '''
         Args:
-            direction_list (list): list of 1 and -1 which expresses the direction of optimum
+            direction_list (list): list of 1 and -1
+                which expresses the direction of optimum
 
         Examples::
 
@@ -120,7 +124,8 @@ class MultiObjectiveBayesianOptimization(object):
 
     def run_moga(self, size=48, gen=100):
         '''
-        runs multi-objective genetic algorithm using gaussian process regression.
+        runs multi-objective genetic algorithm
+        using gaussian process regression.
         objective function is Expected Improvement.
 
         Args:
@@ -139,12 +144,14 @@ class MultiObjectiveBayesianOptimization(object):
         self.algo = pygmo.algorithm(pygmo.nsga2(gen=gen))
         self.pop = self.algo.evolve(self.pop)
 
-        self.non_dominated_fronts, self.domination_list, self.domination_count, self.non_domination_ranks = \
+        self.non_dominated_fronts, self.domination_list, \
+            self.domination_count, self.non_domination_ranks = \
             pygmo.fast_non_dominated_sorting(self.pop.get_f())
         print('moga done.')
         return
 
-    def run_kmeans(self, n_clusters=8, init='k-means++', n_init=10, max_iter=300,
+    def run_kmeans(self, n_clusters=8, init='k-means++',
+                   n_init=10, max_iter=300,
                    tol=0.0001, precompute_distances='auto', verbose=0,
                    random_state=None, copy_x=True, n_jobs=1):
         '''
@@ -162,7 +169,8 @@ class MultiObjectiveBayesianOptimization(object):
                 Notes in k_init for more details.
                 'random': choose k observations (rows) at random from data for
                 the initial centroids.
-                If an ndarray is passed, it should be of shape (n_clusters, n_features)
+                If an ndarray is passed, it should be of shape
+                (n_clusters, n_features)
                 and gives the initial centers.
 
             n_init : int, default: 10
@@ -175,12 +183,14 @@ class MultiObjectiveBayesianOptimization(object):
                 single run.
 
             tol : float, default: 1e-4
-                Relative tolerance with regards to inertia to declare convergence
+                Relative tolerance with regards
+                to inertia to declare convergence
 
             precompute_distances : {'auto', True, False}
                 Precompute distances (faster but takes more memory).
-                'auto' : do not precompute distances if n_samples * n_clusters > 12
-                million. This corresponds to about 100MB overhead per job using
+                'auto' : do not precompute distances
+                if n_samples * n_clusters > 12 million.
+                This corresponds to about 100MB overhead per job using
                 double precision.
                 True : always precompute distances
                 False : never precompute distances
@@ -189,28 +199,37 @@ class MultiObjectiveBayesianOptimization(object):
                 Verbosity mode.
 
             random_state : int, RandomState instance or None (default)
-                Determines random number generation for centroid initialization. Use
+                Determines random number generation
+                for centroid initialization. Use
                 an int to make the randomness deterministic.
 
             copy_x : boolean, optional
-                When pre-computing distances it is more numerically accurate to center
-                the data first.  If copy_x is True (default), then the original data is
-                not modified, ensuring X is C-contiguous.  If False, the original data
-                is modified, and put back before the function returns, but small
-                numerical differences may be introduced by subtracting and then adding
-                the data mean, in this case it will also not ensure that data is
+                When pre-computing distances
+                it is more numerically accurate to center
+                the data first.  If copy_x is True (default),
+                then the original data is
+                not modified, ensuring X is C-contiguous.
+                If False, the original data
+                is modified, and put back before the function returns,
+                but small numerical differences may be
+                introduced by subtracting and then adding
+                the data mean, in this case
+                it will also not ensure that data is
                 C-contiguous which may cause a significant slowdown.
 
             n_jobs : int or None, optional (default=None)
-                The number of jobs to use for the computation. This works by computing
-                each of the n_init runs in parallel.
-                ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
+                The number of jobs to use for the computation.
+                This works by computing each of the n_init runs in parallel.
+                ``None`` means 1 unless in a :obj:`joblib.parallel_backend`
+                context.
                 ``-1`` means using all processors.
 
             algorithm : "auto", "full" or "elkan", default="auto"
-                K-means algorithm to use. The classical EM-style algorithm is "full".
+                K-means algorithm to use.
+                The classical EM-style algorithm is "full".
                 The "elkan" variation is more efficient by using the triangle
-                inequality, but currently doesn't support sparse data. "auto" chooses
+                inequality, but currently doesn't support sparse data.
+                "auto" chooses
                 "elkan" for dense data and "full" for sparse data.
 
         Examples::
@@ -226,7 +245,8 @@ class MultiObjectiveBayesianOptimization(object):
         print('k-means running...')
         self.kmeans_clustering = km(
             n_clusters=n_clusters, init=init, n_init=n_init, max_iter=max_iter,
-            tol=tol, precompute_distances=precompute_distances, verbose=verbose,
+            tol=tol, precompute_distances=precompute_distances,
+            verbose=verbose,
             random_state=random_state, copy_x=copy_x, n_jobs=n_jobs)
 
         X = self.pop.get_x()
