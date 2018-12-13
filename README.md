@@ -46,6 +46,9 @@ if __name__ == "__main__":
 
 - validation
     - zdt1: done
+    - zdt2: done
+    - zdt3: done
+    - zdt6: done
 - constraints handling
 - EHVI handling
 - test code
