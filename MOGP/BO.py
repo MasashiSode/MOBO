@@ -113,6 +113,7 @@ class MultiObjectiveBayesianOptimization(object):
             self.x_observed, self.y_observed, n_cons=self.n_cons)
         self.mogp.set_optimum_direction(self.optimum_direction)
         self.mogp.set_number_of_cpu_core(self.n_multiprocessing)
+
         self.mogp.train()
         print('training done.')
         return
@@ -222,6 +223,7 @@ class MultiObjectiveBayesianOptimization(object):
             https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
         '''
 
+        print('k-means running...')
         self.kmeans_clustering = km(
             n_clusters=n_clusters, init=init, n_init=n_init, max_iter=max_iter,
             tol=tol, precompute_distances=precompute_distances, verbose=verbose,
