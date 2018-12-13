@@ -102,24 +102,28 @@ class MOGP():
         for i in range(0, self.n_params):
             self.x_observed_max[i] = max(self.x_observed[:, i])
             self.x_observed_min[i] = min(self.x_observed[:, i])
-            self.x_observed[:, i] = (self.x_observed[:, i] - self.x_observed_min[i]) / \
+            self.x_observed[:, i] = \
+                (self.x_observed[:, i] - self.x_observed_min[i]) / \
                 (self.x_observed_max[i] - self.x_observed_min[i])
 
         for i in range(0, self.n_obj):
             self.y_observed_max[i] = max(self.y_observed[:, i])
             self.y_observed_min[i] = min(self.y_observed[:, i])
-            self.y_observed[:, i] = (self.y_observed[:, i] - self.y_observed_min[i]) / \
+            self.y_observed[:, i] = \
+                (self.y_observed[:, i] - self.y_observed_min[i]) / \
                 (self.y_observed_max[i] - self.y_observed_min[i])
 
-        self.bounds = ([self.x_observed_min[i] for i in range(0, x_observed.shape[1])],
-                       [self.x_observed_max[i] for i in range(0, x_observed.shape[1])])
+        self.bounds = \
+            ([self.x_observed_min[i] for i in range(0, x_observed.shape[1])],
+             [self.x_observed_max[i] for i in range(0, x_observed.shape[1])])
         self.optimum_direction = -1 * np.ones(self.n_obj)
         return
 
     def set_optimum_direction(self, direction_list):
         '''
         Args:
-            direction_list (list): list of 1 and -1 which expresses the direction of optimum
+            direction_list (list): list of 1 and -1
+            which expresses the direction of optimum
 
         Examples::
 
@@ -127,7 +131,7 @@ class MOGP():
             mogp.set_optimum_direction(direction_list)
         '''
 
-        if isinstance(direction_list, collections.Iterable) == False:
+        if isinstance(direction_list, collections.Iterable) is False:
             print(direction_list, 'is not iterable')
 
         if len(direction_list) != self.n_obj:
@@ -171,9 +175,10 @@ class MOGP():
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
                 self.gpr = \
-                    gp.GaussianProcessRegressor(kernel=kernel, random_state=5).fit(
-                        self.x_observed,
-                        self.y_observed)
+                    gp.GaussianProcessRegressor(
+                        kernel=kernel, random_state=5).fit(
+                            self.x_observed,
+                            self.y_observed)
         else:
             # manager.list shares list in the multi-processing
             with mp.Manager() as manager:
@@ -181,12 +186,13 @@ class MOGP():
                 for i_obj in range(0, self.n_obj):
                     self.gpr[i_obj] = \
                         gp.GaussianProcessRegressor(
-                            kernel=kernel, random_state=0, n_restarts_optimizer=0)
+                            kernel=kernel, random_state=0,
+                            n_restarts_optimizer=0)
 
                 with mp.Pool(self.n_multiprocessing) as p:
                     # p = mp.Pool(self.n_multiprocessing)
                     p.map(MpHelper(self, 'wrapper_mp'),
-                            range(0, self.n_obj))
+                          range(0, self.n_obj))
                     p.close()
                     p.join()
                     self.gpr = [x for x in self.gpr]
@@ -378,7 +384,7 @@ class MOGP():
                 # In case sigma equals zero
                 with np.errstate(divide='ignore'):
                     Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
-                    ei_x[i_obj] = \
+                    ei[i_obj] = \
                         (mu[i_obj] - self.f_ref[i_obj]) * \
                         norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
                     ei[sigma[i_obj] == 0.0] == 0.0
