@@ -61,7 +61,6 @@ def ZDT4(x):
 def ZDT5(x):
     # m = 11 , x_1={0,1}^30 , x_2,...,x_m={0,1}^5
     n_samples = x.shape[0]
-    n_dv = x.shape[1]
 
     f1 = np.zeros(n_samples)
     g = np.zeros(n_samples)
