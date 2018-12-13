@@ -2,6 +2,7 @@ import numpy as np
 import MOGP as MOGP
 import matplotlib.pyplot as plt
 from pyDOE import lhs
+# https://sop.tik.ee.ethz.ch/download/supplementary/testproblems/
 
 
 class ZDT(object):
@@ -103,22 +104,14 @@ class ZDT(object):
         h = np.zeros(n_samples)
 
         for i in range(0, n_samples):
-            f1[i] = 1 - np.exp(-4 * x[i, 0]) * np.sin(6 * np.pi * x[i, 0]) ** 6
+            f1[i] = 1 - np.exp(-4 * x[i, 0]) * \
+                (np.sin(6 * np.pi * x[i, 0]) ** 6)
             g[i] = 1 + 9 * (sum(x[i, 1:]) / (n_dv - 1)) ** 0.25
             h[i] = 1 - (f1[i] / g[i]) ** 2
-        return [f1, g * h]
-
-
-def ReadInput(InputFile):
-    data = np.loadtxt(InputFile, delimiter=",")
-    return data
+        return [f1, h]
 
 
 if __name__ == "__main__":
-    # x_observed: np.array (n_samples, n_params)
-    # x_observed = ReadInput('ZDT1_var.csv')
-    # y_observed: np.array (n_samples, n_obj + n_cons)
-    # y_observed = ReadInput('ZDT1_obj.csv')
     n_zdt = 6
 
     n_init_lhs_samples = 100
