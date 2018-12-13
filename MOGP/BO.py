@@ -275,7 +275,7 @@ class MultiObjectiveBayesianOptimization(object):
         self.kmeans_centroids_original_coor_x = \
             self.kmeans_centroids[:, 0:self.x_observed.shape[1]] * \
             (self.x_observed_max - self.x_observed_min) + self.x_observed_min
-        print('kmeans fitting done.')
+        print('k-means fitting done.')
         return
 
 
