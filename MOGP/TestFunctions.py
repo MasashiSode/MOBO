@@ -122,3 +122,41 @@ def BinhKornFunction(x, args=[]):
     g1 = (x_in[:, 0] - 5) ** 2 + x_in[:, 1] ** 2 - 25
     g2 = 7.7 - (x_in[:, 0] - 8) ** 2 + (x_in[:, 1] + 3) ** 2
     return [f1, f2, g1, g2]
+
+
+def ChakongHaimesFunction(x, args=[]):
+
+    x_in = copy.deepcopy(x)
+    x_in[:, 0] = x_in[:, 0] * 40 - 20
+    x_in[:, 1] = x_in[:, 1] * 40 - 20
+
+    f1 = 2 + (x_in[:, 0] - 2) ** 2 + (x_in[:, 1] - 1) ** 2
+    f2 = 9 * x_in[:, 0] - (x_in[:, 1] - 1) ** 2
+    g1 = x_in[:, 0] ** 2 + x_in[:, 1] ** 2 - 255
+    g2 = x_in[:, 0] - 3 * x_in[:, 1] + 10
+    return [f1, f2, g1, g2]
+
+
+def OsyczkaKunduFunction(x, args=[]):
+
+    x_in = copy.deepcopy(x)
+    x_in[:, 0] = x_in[:, 0] * 10
+    x_in[:, 1] = x_in[:, 1] * 10
+    x_in[:, 2] = x_in[:, 2] * 2 + 3
+    x_in[:, 3] = x_in[:, 3] * 6
+    x_in[:, 4] = x_in[:, 4] * 2 + 3
+    x_in[:, 5] = x_in[:, 5] * 10
+
+    f1 = -25 * (x_in[:, 0] - 2) ** 2 - (x_in[:, 1] - 2) ** 2 - (x_in[:, 2] - 1) ** 2 \
+        - (x_in[:, 3] - 4) ** 2 - (x_in[:, 1] - 1) ** 2
+    f2 = 0
+    for i in range(0, 6):
+        f2 = f2 + x_in[:, i] ** 2
+    g1 = -(x_in[:, 0] + x_in[:, 1] - 2)
+    g2 = -(6 - x_in[:, 0] - x_in[:, 1])
+    g3 = -(2 - x_in[:, 1] + x_in[:, 0])
+    g4 = -(2 - x_in[:, 0] + 3 * x_in[:, 2])
+    g5 = -(4 - (x_in[:, 2] - 3) ** 2 - x_in[:, 3])
+    g6 = -((x_in[:, 4] - 3) ** 2 + x_in[:, 5] - 4)
+
+    return [f1, f2, g1, g2, g3, g4, g5, g6]
