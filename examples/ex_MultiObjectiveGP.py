@@ -1,6 +1,7 @@
 import numpy as np
 import MOGP as MOGP
 import matplotlib.pyplot as plt
+from pyDOE import lhs
 
 
 def ZDT1(x):
@@ -23,13 +24,25 @@ def ReadInput(InputFile):
 
 if __name__ == "__main__":
     # x_observed: np.array (n_samples, n_params)
-    x_observed = ReadInput('ZDT1_var.csv')
+    # x_observed = ReadInput('ZDT1_var.csv')
     # y_observed: np.array (n_samples, n_obj + n_cons)
-    y_observed = ReadInput('ZDT1_obj.csv')
+    # y_observed = ReadInput('ZDT1_obj.csv')
     n_iter = 10
     n_new_ind = 16
-    size = 100
-    gen = 50
+    ga_pop_size = 100
+    ga_gen = 50
+
+    n_init_samples = 50
+    n_dv = 2
+    n_obj = 2
+
+    # latin hyper cube sampling
+    x_observed = lhs(n_dv, samples=n_init_samples)
+    y_observed = np.zeros((n_init_samples, n_obj))
+    y_observed[:, 0], y_observed[:, 1] = ZDT1(x_observed)
+
+    np.savetxt('ZDT1_var_init.csv', x_observed, delimiter=',')
+    np.savetxt('ZDT1_obj_init.csv', y_observed, delimiter=',')
 
     for i in range(0, n_iter):
         print('\n--- iter: ', i, '/', n_iter - 1, '---')
@@ -40,13 +53,13 @@ if __name__ == "__main__":
         mobo.train_GPModel()
 
         # multi-objective optimization(nsga2) on surrogate model
-        mobo.run_moga(size=size, gen=gen)
+        mobo.run_moga(size=ga_pop_size, gen=ga_gen)
 
         # clustering solutions
-        mobo.run_kmeans(n_clusters=n_new_ind)
+        mobo.run_kmeans(n_clusters=n_new_ind, n_jobs=-1, n_init=20)
 
         new_indv_x = mobo.kmeans_centroids_original_coor_x
-        new_indv_y = np.zeros((n_new_ind, 2))
+        new_indv_y = np.zeros((new_indv_x.shape[0], 2))
         new_indv_y[:, 0], new_indv_y[:, 1] = ZDT1(new_indv_x)
 
         # delete duplicate values
@@ -61,8 +74,8 @@ if __name__ == "__main__":
             input_observed[:, x_observed.shape[1]:x_observed.shape[1] +
                            y_observed.shape[1] + 1]
 
-    np.savetxt('ZDT1_obj_opt.csv', y_observed, delimiter=',')
-    np.savetxt('ZDT1_var_opt.csv', x_observed, delimiter=',')
+    np.savetxt('ZDT1_obj_res.csv', y_observed, delimiter=',')
+    np.savetxt('ZDT1_var_res.csv', x_observed, delimiter=',')
 
     plt.grid(True)
     plt.scatter(y_observed[:, 0], y_observed[:, 1])
