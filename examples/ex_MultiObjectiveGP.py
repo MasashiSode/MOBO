@@ -56,7 +56,7 @@ class ZDT(object):
         for i in range(0, n_samples):
             g[i] = 1 + 9 * sum(x[i, 1:]) / (n_dv - 1)
             h[i] = 1 - np.sqrt(x[i, 0] / g[i]) - \
-                (x[i, 0] / g[i]) * np.sin(10 * np.pi * x[0])
+                (x[i, 0] / g[i]) * np.sin(10 * np.pi * x[i, 0])
         return [x[:, 0], g * h]
 
     def ZDT4(self, x):
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     n_dv = 2
     n_obj = 2
 
-    n_zdt = 1
+    n_zdt = 3
 
     zdt = ZDT()
     func = zdt.get_func(n_zdt)
@@ -136,8 +136,8 @@ if __name__ == "__main__":
     y_observed = np.zeros((n_init_samples, n_obj))
     y_observed[:, 0], y_observed[:, 1] = func(x_observed)
 
-    np.savetxt('ZDT2_var_init.csv', x_observed, delimiter=',')
-    np.savetxt('ZDT2_obj_init.csv', y_observed, delimiter=',')
+    np.savetxt('ZDT' + str(n_zdt) + '_var_init.csv', x_observed, delimiter=',')
+    np.savetxt('ZDT' + str(n_zdt) + '_obj_init.csv', y_observed, delimiter=',')
 
     for i in range(0, n_iter):
         print('\n--- iter: ', i, '/', n_iter - 1, '---')
@@ -164,8 +164,8 @@ if __name__ == "__main__":
         x_observed = np.concatenate([x_observed, new_indv_x], axis=0)
         y_observed = np.concatenate([y_observed, new_indv_y], axis=0)
 
-    np.savetxt('ZDT2_obj_res.csv', y_observed, delimiter=',')
-    np.savetxt('ZDT2_var_res.csv', x_observed, delimiter=',')
+    np.savetxt('ZDT' + str(n_zdt) + '_obj_res.csv', y_observed, delimiter=',')
+    np.savetxt('ZDT' + str(n_zdt) + '_var_res.csv', x_observed, delimiter=',')
 
     plt.grid(True)
     plt.scatter(y_observed[:, 0], y_observed[:, 1])
