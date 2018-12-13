@@ -194,7 +194,7 @@ class MOGP():
                 with mp.Pool(self.n_multiprocessing) as p:
                     # p = mp.Pool(self.n_multiprocessing)
                     p.map(MpHelper(self, 'wrapper_mp'),
-                          range(0, self.n_obj))
+                          range(0, self.n_obj_cons))
                     p.close()
                     p.join()
                     self.gpr = [x for x in self.gpr]
@@ -219,7 +219,7 @@ class MOGP():
             x: np.array, size = [n_input, n_params]
 
         Returns:
-            mu, sigma (float or list): mean and variance size = [2, n_obj]
+            mu, sigma (float or list): mean and std size = [2, n_obj]
 
         Example::
 
@@ -258,7 +258,7 @@ class MOGP():
             x: np.array, size = [n_input, n_params]
 
         Returns:
-            mu, sigma (float or list): mean and variance size = [2, n_obj]
+            mu, sigma (float or list): mean and std size = [2, n_obj]
 
         Example::
 
@@ -352,12 +352,24 @@ class MOGP():
         Expected penalty to calculate the probability of constraints.
         uses probability of g(x) <= 0. g > 0 is infeasible.
         """
-        pof = np.ones(self.n_cons)
-        i = 0
-        for i_cons in range(self.n_obj, self.n_obj_cons):
-            mu, var = self.gpr[i_cons].predict(x, return_std=True)
-            pof[i] = norm.cdf(0, loc=mu[0], scale=var[0])
-            i = i + 1
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            pof = np.ones(self.n_cons)
+            mu = np.zeros(self.n_cons)
+            sigma = np.zeros(self.n_cons)
+            i = 0
+            for i_cons in range(self.n_obj, self.n_obj_cons):
+                temp1, temp2 = self.gpr[i_cons].predict(x, return_std=True)
+                mu[i] = temp1[0]
+                sigma[i] = temp2[0]
+
+                with np.errstate(divide='ignore'):
+                    # Z = - mu[i] / sigma[i]
+                    # pof[i] = norm.cdf(Z)
+                    pof[i] = norm.cdf(0, loc=mu[i], scale=sigma[i])
+                pof[sigma[i] == 0] = 0
+                # print(mu[i], sigma[i], pof[i])
+                i = i + 1
         return pof
 
     def constrained_EI(self, x):
@@ -387,13 +399,14 @@ class MOGP():
 
                 # In case sigma equals zero
                 with np.errstate(divide='ignore'):
-                    Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
+                    Z = (self.f_ref[i_obj] - mu[i_obj]) / sigma[i_obj]
                     ei[i_obj] = \
-                        (mu[i_obj] - self.f_ref[i_obj]) * \
+                        (self.f_ref[i_obj] - mu[i_obj]) * \
                         norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
-                    ei[sigma[i_obj] == 0.0] == 0.0
+                ei[sigma[i_obj] == 0.0] = 0.0
 
         pof = self.probability_of_feasibility(x)
         pof_all = np.prod(pof)
         cei = ei * pof_all
+        print(pof_all, cei)
         return cei

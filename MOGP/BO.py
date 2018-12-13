@@ -53,13 +53,14 @@ class MultiObjectiveBayesianOptimization(object):
 
         self.n_features = self.x_observed.shape[0]
         self.n_params = self.x_observed.shape[1]
+        self.n_obj_cons = self.y_observed.shape[1]
         self.n_obj = self.y_observed.shape[1] - n_cons
         self.n_cons = n_cons
 
         self.x_observed_max = np.zeros(self.n_params)
         self.x_observed_min = np.zeros(self.n_params)
-        self.y_observed_max = np.zeros(self.n_obj)
-        self.y_observed_min = np.zeros(self.n_obj)
+        self.y_observed_max = np.zeros(self.n_obj_cons)
+        self.y_observed_min = np.zeros(self.n_obj_cons)
 
         # normalization
         for i in range(0, self.n_params):
@@ -75,6 +76,13 @@ class MultiObjectiveBayesianOptimization(object):
             self.y_observed[:, i] = \
                 (self.y_observed[:, i] - self.y_observed_min[i]) / \
                 (self.y_observed_max[i] - self.y_observed_min[i])
+
+        for i in range(self.n_obj, self.n_obj_cons):
+            self.y_observed_max[i] = max(self.y_observed[:, i])
+            self.y_observed_min[i] = min(self.y_observed[:, i])
+            # self.y_observed[:, i] = \
+            #     self.y_observed[:, i] / \
+            #     abs(self.y_observed_max[i] - self.y_observed_min[i])
 
         self.bounds = \
             ([self.x_observed_min[i] for i in range(0, x_observed.shape[1])],
@@ -290,7 +298,7 @@ class MultiObjectiveBayesianOptimization(object):
         Args:
             func:
                 multi objective function you want to minimize.
-                y = f(x, agrs=[])\
+                y = f(x, agrs=[])
                 0 <= x[i] <=1
 
             args (list):
@@ -345,8 +353,7 @@ class MultiObjectiveBayesianOptimization(object):
             # evaluate new points
             print('function evaluation')
             new_indv_x = self.kmeans_centroids_original_coor_x
-            new_indv_y = np.zeros((new_indv_x.shape[0], n_obj_cons))
-            y = np.array(func(x=new_indv_x, args=args)).T
+            new_indv_y = np.array(func(x=new_indv_x, args=args)).T
             print('function evaluation done.')
 
             # update observed values
