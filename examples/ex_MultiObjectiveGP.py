@@ -42,20 +42,20 @@ if __name__ == "__main__":
         # multi-objective optimization(nsga2) on surrogate model
         mobo.run_moga(size=size, gen=gen)
 
-        # clustering pareto front solutions
+        # clustering solutions
         mobo.run_kmeans(n_clusters=n_new_ind)
+
         new_indv_x = mobo.kmeans_centroids_original_coor_x
         new_indv_y = np.zeros((n_new_ind, 2))
         new_indv_y[:, 0], new_indv_y[:, 1] = ZDT1(new_indv_x)
 
+        # delete duplicate values
         x_observed = np.concatenate([x_observed, new_indv_x], axis=0)
         y_observed = np.concatenate([y_observed, new_indv_y], axis=0)
-
         input_observed = np.concatenate([x_observed, y_observed], axis=1)
         input_observed, indeices = \
             np.unique(input_observed, axis=0, return_inverse=True)
         input_observed = input_observed[indeices]
-
         x_observed = input_observed[:, 0:x_observed.shape[1]]
         y_observed = \
             input_observed[:, x_observed.shape[1]:x_observed.shape[1] +
