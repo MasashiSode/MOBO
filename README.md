@@ -60,6 +60,6 @@ if __name__ == "__main__":
     - zdt2: done
     - zdt3: done
     - zdt6: done
-- constraints handling
+    - Binh and Korn function
 - EHVI handling
 - test code
