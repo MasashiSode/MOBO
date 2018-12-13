@@ -14,7 +14,7 @@ setup(
     install_requires=['numpy',
                       'matplotlib', 'scipy',
                       'scikit-learn',
-                      'pygmo', 'sphinx',
+                      'pygmo', 'sphinx', 'pydoe',
                       'sphinxcontrib-seqdiag',
                       'sphinx_rtd_theme',
                       'recommonmark'],
