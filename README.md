@@ -12,33 +12,44 @@ see also https://github.com/MasashiSode/MOGP/tree/master/examples
 
 ```python
 import numpy as np
-import MOGP
-
-
-def ReadInput(InputFile):
-    data = np.loadtxt(InputFile, delimiter=",")
-    return data
+import MOGP as MOGP
+import matplotlib.pyplot as plt
+from pyDOE import lhs
 
 
 if __name__ == "__main__":
-    # x_observed: np.array (n_samples, n_params)
-    x_observed = ReadInput('InputVar.csv')
-    # y_observed: np.array (n_samples, n_obj + n_cons)
-    y_observed = ReadInput('InputObj.csv')
+    n_zdt = 2
+
+    n_init_lhs_samples = 24
+
+    n_dv = 2
+    n_obj = 2
+
+    n_iter = 10
+    n_new_ind = 16
+
+    ga_pop_size = 100
+    ga_gen = 50
+
+    # user defined function y = f(x, args=[])
+    zdt = MOGP.TestFunctions.ZDT()
+    func = zdt.get_func(n_zdt)
 
     mobo = MOGP.MultiObjectiveBayesianOptimization()
-    mobo.set_train_data(x_observed, y_observed, n_cons=0)
+    mobo.run_mobo(func=func, args=[],
+                  n_dv=n_dv, n_obj=n_obj,
+                  n_init_lhs_samples=24,
+                  n_iter=10, n_new_ind=16,
+                  ga_pop_size=100, ga_gen=50, n_cons=0)
 
-    # training Gaussian Process regression
-    mobo.train_GPModel()
+    np.savetxt('ZDT' + str(n_zdt) + '_obj_res.csv',
+               mobo.y_observed, delimiter=',')
+    np.savetxt('ZDT' + str(n_zdt) + '_var_res.csv',
+               mobo.x_observed, delimiter=',')
 
-    # multi-objective optimization(nsga2) on surrogate model
-    mobo.run_moga()
-
-    # clustering pareto front solutions
-    mobo.run_kmeans()
-    print(mobo.kmeans_centroids)
-
+    plt.grid(True)
+    plt.scatter(mobo.y_observed[:, 0], mobo.y_observed[:, 1])
+    plt.show()
 
 ```
 
