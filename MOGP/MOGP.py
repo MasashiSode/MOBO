@@ -4,6 +4,7 @@ import sklearn.gaussian_process as gp
 import multiprocessing as mp
 from scipy.stats import norm
 import copy
+import warnings
 
 
 # from scipy.optimize import minimize
@@ -297,26 +298,28 @@ class MOGP():
         ei_x = np.zeros(self.n_obj)
         self.f_ref = np.zeros(self.n_obj)
 
-        for i_obj in range(0, self.n_obj):
-            temp1, temp2 = \
-                self.gpr[i_obj].predict(x, return_std=True)
-            mu[i_obj] = temp1[0]
-            sigma[i_obj] = temp2[0]
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            for i_obj in range(0, self.n_obj):
+                temp1, temp2 = \
+                    self.gpr[i_obj].predict(x, return_std=True)
+                mu[i_obj] = temp1[0]
+                sigma[i_obj] = temp2[0]
 
-            if self.optimum_direction[i_obj] == 1:
-                self.f_ref[i_obj] = np.max(
-                    self.y_observed[:, i_obj])
-            else:
-                self.f_ref[i_obj] = np.min(
-                    self.y_observed[:, i_obj])
+                if self.optimum_direction[i_obj] == 1:
+                    self.f_ref[i_obj] = np.max(
+                        self.y_observed[:, i_obj])
+                else:
+                    self.f_ref[i_obj] = np.min(
+                        self.y_observed[:, i_obj])
 
-            # In case sigma equals zero
-            with np.errstate(divide='ignore'):
-                Z = (self.f_ref[i_obj] - mu[i_obj]) / sigma[i_obj]
-                ei_x[i_obj] = \
-                    (self.f_ref[i_obj] - mu[i_obj]) * \
-                    norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
-            ei_x[sigma[i_obj] == 0.0] = 0.0
+                # In case sigma equals zero
+                with np.errstate(divide='ignore'):
+                    Z = (self.f_ref[i_obj] - mu[i_obj]) / sigma[i_obj]
+                    ei_x[i_obj] = \
+                        (self.f_ref[i_obj] - mu[i_obj]) * \
+                        norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
+                ei_x[sigma[i_obj] == 0.0] = 0.0
         return ei_x
 
     def expected_hypervolume_improvement(self, x):
@@ -353,26 +356,28 @@ class MOGP():
         ei = np.zeros(self.n_obj)
         self.f_ref = np.zeros(self.n_obj)
 
-        for i_obj in range(0, self.n_obj):
-            temp1, temp2 = \
-                self.gpr[i_obj].predict(x, return_std=True)
-            mu[i_obj] = temp1[0]
-            sigma[i_obj] = temp2[0]
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            for i_obj in range(0, self.n_obj):
+                temp1, temp2 = \
+                    self.gpr[i_obj].predict(x, return_std=True)
+                mu[i_obj] = temp1[0]
+                sigma[i_obj] = temp2[0]
 
-            if self.optimum_direction[i_obj] == 1:
-                self.f_ref[i_obj] = np.max(
-                    self.y_observed[:, i_obj])
-            else:
-                self.f_ref[i_obj] = np.min(
-                    self.y_observed[:, i_obj])
+                if self.optimum_direction[i_obj] == 1:
+                    self.f_ref[i_obj] = np.max(
+                        self.y_observed[:, i_obj])
+                else:
+                    self.f_ref[i_obj] = np.min(
+                        self.y_observed[:, i_obj])
 
-            # In case sigma equals zero
-            with np.errstate(divide='ignore'):
-                Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
-                ei_x[i_obj] = \
-                    (mu[i_obj] - self.f_ref[i_obj]) * \
-                    norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
-                ei[sigma[i_obj] == 0.0] == 0.0
+                # In case sigma equals zero
+                with np.errstate(divide='ignore'):
+                    Z = (mu[i_obj] - self.f_ref[i_obj]) / sigma[i_obj]
+                    ei_x[i_obj] = \
+                        (mu[i_obj] - self.f_ref[i_obj]) * \
+                        norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
+                    ei[sigma[i_obj] == 0.0] == 0.0
 
         pof = self.probability_of_feasibility(x)
         pof_all = np.prod(pof)
