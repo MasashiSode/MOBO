@@ -22,6 +22,8 @@ class ZDT(object):
         return self.func[self.n_zdt](x)
 
     def get_func(self, n_zdt=1):
+        if n_zdt == 5 or n_zdt == 4:
+            raise ValueError
         self.n_zdt = n_zdt - 1
         return self.func[self.n_zdt]
 
@@ -114,11 +116,12 @@ class ZDT(object):
 if __name__ == "__main__":
     n_zdt = 6
 
-    n_init_lhs_samples = 100
+    n_init_lhs_samples = 500
+
     n_dv = 2
     n_obj = 2
 
-    n_iter = 10
+    n_iter = 20
     n_new_ind = 16
 
     ga_pop_size = 100
