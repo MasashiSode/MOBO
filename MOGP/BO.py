@@ -145,7 +145,7 @@ class MultiObjectiveBayesianOptimization(object):
         print('training done.')
         return
 
-    def run_moga(self, size=48, gen=100):
+    def run_moga(self, size=48, gen=100, m=0.03):
         '''
         runs multi-objective genetic algorithm
         using gaussian process regression.
@@ -164,7 +164,7 @@ class MultiObjectiveBayesianOptimization(object):
         print('moga running...')
         self.prob = pygmo.problem(BayesianOptimizationProblem(self.mogp))
         self.pop = pygmo.population(self.prob, size=size)
-        self.algo = pygmo.algorithm(pygmo.nsga2(gen=gen))
+        self.algo = pygmo.algorithm(pygmo.nsga2(gen=gen, m=m))
         self.pop = self.algo.evolve(self.pop)
 
         self.non_dominated_fronts, self.domination_list, \
@@ -291,7 +291,7 @@ class MultiObjectiveBayesianOptimization(object):
                  n_dv=0, n_obj_cons=0,
                  n_init_lhs_samples=24,
                  n_iter=10, n_new_ind=16,
-                 ga_pop_size=100, ga_gen=50, n_cons=0):
+                 ga_pop_size=100, ga_gen=50, n_cons=0, mutation=0.03):
         '''
         runs multi-objective bayesian optimization
 
@@ -345,7 +345,7 @@ class MultiObjectiveBayesianOptimization(object):
             self.train_GPModel()
 
             # multi-objective optimization(nsga2) on surrogate model
-            self.run_moga(size=ga_pop_size, gen=ga_gen)
+            self.run_moga(size=ga_pop_size, gen=ga_gen, m=mutation)
 
             # clustering solutions
             self.run_kmeans(n_clusters=n_new_ind, n_jobs=-1, n_init=20)

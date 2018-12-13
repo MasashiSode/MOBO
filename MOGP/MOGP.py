@@ -408,5 +408,5 @@ class MOGP():
         pof = self.probability_of_feasibility(x)
         pof_all = np.prod(pof)
         cei = ei * pof_all
-        print(pof_all, cei)
+        # print(pof_all, cei)
         return cei
