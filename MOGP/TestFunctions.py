@@ -24,7 +24,7 @@ class ZDT(object):
         self.n_zdt = n_zdt - 1
         return self.func[self.n_zdt]
 
-    def ZDT1(self, x):
+    def ZDT1(self, x, args=[]):
         # m = 30 , x_i in [0,1]
         n_samples = x.shape[0]
         n_dv = x.shape[1]
@@ -36,7 +36,7 @@ class ZDT(object):
             h[i] = 1 - np.sqrt(x[i, 0] / g[i])
         return [x[:, 0], g * h]
 
-    def ZDT2(self, x):
+    def ZDT2(self, x, args=[]):
         # m = 30 , x_i in [0,1]
         n_samples = x.shape[0]
         n_dv = x.shape[1]
@@ -48,7 +48,7 @@ class ZDT(object):
             h[i] = 1 - (x[i, 0] / g[i]) ** 2
         return [x[:, 0], g * h]
 
-    def ZDT3(self, x):
+    def ZDT3(self, x, args=[]):
         # m = 30 , x_i in [0,1]
         n_samples = x.shape[0]
         n_dv = x.shape[1]
@@ -93,7 +93,7 @@ class ZDT(object):
     #         h[i] = 1 / f1[i]
     #     return [f1, g * h]
 
-    def ZDT6(self, x):
+    def ZDT6(self, x, args=[]):
         # m = 10 , x_i in [0,1]
         n_samples = x.shape[0]
         n_dv = x.shape[1]
