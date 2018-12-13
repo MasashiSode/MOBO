@@ -8,6 +8,7 @@ from sklearn.cluster import KMeans as km
 import multiprocessing as mp
 from matplotlib import pyplot as plt
 import copy
+from pyDOE import lhs
 
 
 class MultiObjectiveBayesianOptimization(object):
@@ -277,6 +278,49 @@ class MultiObjectiveBayesianOptimization(object):
             (self.x_observed_max - self.x_observed_min) + self.x_observed_min
         print('k-means fitting done.')
         return
+
+    def run_mobo(self, func=None, args=[],
+                 n_dv=0, n_obj=0,
+                 n_init_lhs_samples=24,
+                 n_iter=10, n_new_ind=16,
+                 ga_pop_size=100, ga_gen=50, n_cons=0):
+
+        # n_dv = func.get_n_dv()
+        # n_obj = func.get_n_obj()
+
+        # func = zdt.get_func(n_zdt)
+
+        # latin hyper cube sampling
+        x_observed = lhs(n_dv, samples=n_init_lhs_samples)
+        y_observed = np.zeros((n_init_lhs_samples, n_obj))
+        y_observed[:, 0], y_observed[:, 1] = func(x=x_observed, args=args)
+
+        for i in range(0, n_iter):
+            print('\n--- iter: ', i, '/', n_iter - 1, '---')
+
+            # mobo = MOGP.MultiObjectiveBayesianOptimization()
+            self.set_train_data(x_observed, y_observed, n_cons=n_cons)
+
+            # training Gaussian Process regression
+            self.train_GPModel()
+
+            # multi-objective optimization(nsga2) on surrogate model
+            self.run_moga(size=ga_pop_size, gen=ga_gen)
+
+            # clustering solutions
+            self.run_kmeans(n_clusters=n_new_ind, n_jobs=-1, n_init=20)
+
+            # evaluate new points
+            print('function evaluation')
+            new_indv_x = self.kmeans_centroids_original_coor_x
+            new_indv_y = np.zeros((new_indv_x.shape[0], 2))
+            new_indv_y[:, 0], new_indv_y[:, 1] = \
+                func(x=new_indv_x, args=args)
+            print('function evaluation done.')
+
+            # update observed values
+            x_observed = np.concatenate([x_observed, new_indv_x], axis=0)
+            y_observed = np.concatenate([y_observed, new_indv_y], axis=0)
 
 
 class BayesianOptimizationProblem():
