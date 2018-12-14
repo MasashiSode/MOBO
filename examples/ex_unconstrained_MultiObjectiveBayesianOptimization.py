@@ -1,5 +1,5 @@
 import numpy as np
-import MOGP as MOGP
+import MOGP
 import matplotlib.pyplot as plt
 from pyDOE import lhs
 
