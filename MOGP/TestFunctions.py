@@ -161,3 +161,4 @@ def OsyczkaKunduFunction(x, args=[]):
     g6 = ((x_in[:, 4] - 3) ** 2 + x_in[:, 5] - 4)
 
     return [f1, f2, g1, g2, g3, g4, g5, g6]
+
