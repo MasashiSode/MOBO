@@ -6,22 +6,24 @@ from pyDOE import lhs
 
 if __name__ == "__main__":
 
-    n_init_lhs_samples = 48
+    n_init_lhs_samples = 100
 
-    n_dv = 2
-    n_obj_cons = 4
-    n_cons = 2
+    n_dv = 6
+    n_obj_cons = 8
+    n_cons = 6
 
-    n_iter = 10
+    n_iter = 1
     n_new_ind = 8
 
     ga_pop_size = 100
     ga_gen = 50
 
-    mutation = 0.08
+    mutation = 0.03
 
     # user defined function y = f(x, args=[])
-    func = MOGP.TestFunctions.BinhKornFunction
+    # func = MOGP.TestFunctions.BinhKornFunction
+    # func = MOGP.TestFunctions.ChakongHaimesFunction
+    func = MOGP.TestFunctions.OsyczkaKunduFunction
 
     mobo = MOGP.MultiObjectiveBayesianOptimization()
     mobo.run_mobo(func=func, args=[],
