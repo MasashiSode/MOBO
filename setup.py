@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 #     sys.exit('Sorry, Python >= 3.7 is not supported')
 
 setup(
-    name='MOGP',
+    name='mogp',
     python_requires='<3.7',
     version='0.0.1',
     description='Multi-objective gaussian process regression package',
