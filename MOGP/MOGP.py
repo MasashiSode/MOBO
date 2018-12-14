@@ -7,21 +7,15 @@ import copy
 import warnings
 
 
-# from scipy.optimize import minimize
-# import copy
-# from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel
-# from scipy import integrate
-
-
 class MpHelper(object):
-    '''
+    """
     helper function for multiprocessing to call class method
 
     Note:
         japaese site
         http://aflc.hatenablog.com/entry/20110825/1314366131
 
-    '''
+    """
 
     def __init__(self, cls, mtd_name):
         self.cls = cls
@@ -32,7 +26,7 @@ class MpHelper(object):
 
 
 class MOGP():
-    '''
+    """
     MOGP (Multi-Objective Gaussian Process) core class
 
     Note:
@@ -51,7 +45,7 @@ class MOGP():
         x = np.array([[-4.9, -4.9]])
         print(mogp.expected_improvement(x))
 
-    '''
+    """
 
     def __init__(self):
         self.y_observed = None
@@ -69,7 +63,7 @@ class MOGP():
         return
 
     def set_train_data(self, x_observed, y_observed, n_cons=0):
-        '''
+        """
         Args:
             x_observed: np.array (n_samples, n_params)
             y_observed: np.array (n_samples, n_obj)
@@ -79,7 +73,7 @@ class MOGP():
             mogp = MOGP.MOGP()
             mogp.set_train_data(x_observed, y_observed)
 
-        '''
+        """
         if not isinstance(x_observed, np.ndarray):
             raise ValueError
         if not isinstance(y_observed, np.ndarray):
@@ -122,7 +116,7 @@ class MOGP():
         return
 
     def set_optimum_direction(self, direction_list):
-        '''
+        """
         Args:
             direction_list (list): list of 1 and -1
             which expresses the direction of optimum
@@ -131,7 +125,7 @@ class MOGP():
 
             direction_list = [-1, 1, -1]
             mogp.set_optimum_direction(direction_list)
-        '''
+        """
 
         if isinstance(direction_list, collections.Iterable) is False:
             print(direction_list, 'is not iterable')
@@ -150,7 +144,7 @@ class MOGP():
         return
 
     def train(self, kernel=gp.kernels.Matern()):
-        '''
+        """
         trains Gaussian process for regression
 
         Note:
@@ -165,7 +159,7 @@ class MOGP():
             mogp = MOGPOpt.MOGP()
             mogp.set_train_data(x_observed, y_observed)
             mogp.train()
-        '''
+        """
         if self.y_observed is None or \
                 self.x_observed is None:
             print('set_train_data first')
@@ -211,7 +205,7 @@ class MOGP():
         return
 
     def predict_original_coor(self, x):
-        '''
+        """
         Note:
             use it after training
 
@@ -227,7 +221,7 @@ class MOGP():
             mu, sigma = mogp.predict(x)
             print(mu, sigma)
 
-        '''
+        """
         print('start predict')
         x = x.reshape(-1, self.n_params)
         if self.gpr is None:
@@ -250,7 +244,7 @@ class MOGP():
         return np.array([mu, sigma])
 
     def predict_standarize_value(self, x):
-        '''
+        """
         Note:
             use it after training
 
@@ -266,7 +260,7 @@ class MOGP():
             mu, sigma = mogp.predict(x)
             print(mu, sigma)
 
-        '''
+        """
         print('start predict')
         x = x.reshape(-1, self.n_params)
         if self.gpr is None:
@@ -348,8 +342,8 @@ class MOGP():
         return
 
     def probability_of_feasibility(self, x):
-        """ expected_penalty
-        Expected penalty to calculate the probability of constraints.
+        """
+        calculates the probability of feasibility.
         uses probability of g(x) <= 0. g > 0 is infeasible.
         """
         with warnings.catch_warnings():
@@ -373,9 +367,9 @@ class MOGP():
         return pof
 
     def constrained_EI(self, x):
-        '''
+        """
         uses probability of g(x) <= 0. g > 0 is infeasible.
-        '''
+        """
 
         mu = np.zeros(self.n_obj)
         sigma = np.zeros(self.n_obj)

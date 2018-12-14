@@ -114,7 +114,7 @@ class MultiObjectiveBayesianOptimization(object):
         return
 
     def set_number_of_cpu_core(self, n_multiprocessing=mp.cpu_count()):
-        '''
+        """
         sets number of cpu cores you use in
         multi-objective EI calculation (default all cpu)
 
@@ -122,7 +122,7 @@ class MultiObjectiveBayesianOptimization(object):
 
             cpu = 4
             mogp.set_number_of_cpu_core(cpu)
-        '''
+        """
 
         if type(n_multiprocessing) is not int:
             raise ValueError
@@ -130,13 +130,13 @@ class MultiObjectiveBayesianOptimization(object):
         return
 
     def train_GPModel(self, kernel=gp.kernels.Matern()):
-        '''
+        """
         Examples::
 
             mobo = MOGP.MultiObjectiveBayesianOptimization()
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
-        '''
+        """
         print('training running...')
         self.mogp = MOGP.MOGP()
         self.mogp.set_train_data(
@@ -149,7 +149,7 @@ class MultiObjectiveBayesianOptimization(object):
         return
 
     def run_moga(self, size=48, gen=100, m=0.03):
-        '''
+        """
         runs multi-objective genetic algorithm
         using gaussian process regression.
         objective function is Expected Improvement.
@@ -163,7 +163,7 @@ class MultiObjectiveBayesianOptimization(object):
             mobo = MOGP.MultiObjectiveBayesianOptimization()
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
-        '''
+        """
         print('moga running...')
         self.prob = pygmo.problem(BayesianOptimizationProblem(self.mogp))
         self.pop = pygmo.population(self.prob, size=size)
@@ -180,7 +180,7 @@ class MultiObjectiveBayesianOptimization(object):
                    n_init=10, max_iter=300,
                    tol=0.0001, precompute_distances='auto', verbose=0,
                    random_state=None, copy_x=True, n_jobs=1):
-        '''
+        """
         clustering parate front solutions by k-means
 
         Args:
@@ -266,7 +266,7 @@ class MultiObjectiveBayesianOptimization(object):
 
         See Also:
             https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
-        '''
+        """
 
         print('k-means running...')
         self.kmeans_clustering = km(
@@ -295,7 +295,7 @@ class MultiObjectiveBayesianOptimization(object):
                  n_init_lhs_samples=24,
                  n_iter=10, n_new_ind=16,
                  ga_pop_size=100, ga_gen=50, n_cons=0, mutation=0.03):
-        '''
+        """
         runs multi-objective bayesian optimization
 
         Args:
@@ -331,7 +331,7 @@ class MultiObjectiveBayesianOptimization(object):
             n_cons (int):
                 number of constraints functions
 
-        '''
+        """
 
         # latin hyper cube sampling
         x_observed = lhs(n_dv, samples=n_init_lhs_samples)
@@ -367,9 +367,9 @@ class MultiObjectiveBayesianOptimization(object):
 
 
 class BayesianOptimizationProblem():
-    '''
+    """
     pyGMO wrapper for gaussian process regression
-    '''
+    """
 
     def __init__(self, mogp):
         self.mogp = mogp
