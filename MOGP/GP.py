@@ -12,7 +12,7 @@ class MpHelper(object):
     helper function for multiprocessing to call class method
 
     Note:
-        japaese site
+        japanese site
         http://aflc.hatenablog.com/entry/20110825/1314366131
 
     """
@@ -25,9 +25,9 @@ class MpHelper(object):
         return getattr(self.cls, self.mtd_name)(*args, **kwargs)
 
 
-class MOGP():
+class GaussianProcess():
     """
-    MOGP (Multi-Objective Gaussian Process) core class
+    Multi-Objective Gaussian Process core class
 
     Note:
         Set parameters first before train
