@@ -1,6 +1,5 @@
 # MOGP (Multi-Objective Gaussian Process)
-this package is under construction  
-validation not done  
+this package is under construction 
 
 constrained/unconstrained multi-objective bayesian optimization package
 ## Install
