@@ -17,17 +17,17 @@ class MultiObjectiveBayesianOptimization(object):
         self.n_multiprocessing = mp.cpu_count()
 
     def set_train_data(self, x_observed, y_observed, n_cons=0):
-        '''
+        """
         Args:
             x_observed: np.array (n_samples, n_params)
             y_observed: np.array (n_samples, n_obj + n_cons)
 
         Example::
 
-            mogp = MOGPOpt.MOGP()
+            mogp = MOGP.MOGP()
             mogp.set_train_data(x_observed, y_observed)
 
-        '''
+        """
         if not isinstance(x_observed, np.ndarray):
             raise ValueError
         if not isinstance(y_observed, np.ndarray):
@@ -35,8 +35,11 @@ class MultiObjectiveBayesianOptimization(object):
         if n_cons is not 0:
             self.flag_cons = True
 
-        self.y_observed = copy.deepcopy(y_observed)
+        self.x_observed_org_coor = copy.deepcopy(x_observed)
+        self.y_observed_org_coor = copy.deepcopy(y_observed)
+
         self.x_observed = copy.deepcopy(x_observed)
+        self.y_observed = copy.deepcopy(y_observed)
 
         # delete duplicate values
         input_observed = np.concatenate(
@@ -64,22 +67,22 @@ class MultiObjectiveBayesianOptimization(object):
 
         # normalization
         for i in range(0, self.n_params):
-            self.x_observed_max[i] = max(self.x_observed[:, i])
-            self.x_observed_min[i] = min(self.x_observed[:, i])
+            self.x_observed_max[i] = max(copy.deepcopy(self.x_observed[:, i]))
+            self.x_observed_min[i] = min(copy.deepcopy(self.x_observed[:, i]))
             self.x_observed[:, i] = \
                 (self.x_observed[:, i] - self.x_observed_min[i]) / \
                 (self.x_observed_max[i] - self.x_observed_min[i])
 
         for i in range(0, self.n_obj):
-            self.y_observed_max[i] = max(self.y_observed[:, i])
-            self.y_observed_min[i] = min(self.y_observed[:, i])
+            self.y_observed_max[i] = max(copy.deepcopy(self.y_observed[:, i]))
+            self.y_observed_min[i] = min(copy.deepcopy(self.y_observed[:, i]))
             self.y_observed[:, i] = \
                 (self.y_observed[:, i] - self.y_observed_min[i]) / \
                 (self.y_observed_max[i] - self.y_observed_min[i])
 
         for i in range(self.n_obj, self.n_obj_cons):
-            self.y_observed_max[i] = max(self.y_observed[:, i])
-            self.y_observed_min[i] = min(self.y_observed[:, i])
+            self.y_observed_max[i] = max(copy.deepcopy(self.y_observed[:, i]))
+            self.y_observed_min[i] = min(copy.deepcopy(self.y_observed[:, i]))
             # self.y_observed[:, i] = \
             #     self.y_observed[:, i] / \
             #     abs(self.y_observed_max[i] - self.y_observed_min[i])
@@ -359,6 +362,8 @@ class MultiObjectiveBayesianOptimization(object):
             # update observed values
             x_observed = np.concatenate([x_observed, new_indv_x], axis=0)
             y_observed = np.concatenate([y_observed, new_indv_y], axis=0)
+            self.x_observed_org_coor = copy.deepcopy(x_observed)
+            self.y_observed_org_coor = copy.deepcopy(y_observed)
 
 
 class BayesianOptimizationProblem():
