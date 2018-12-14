@@ -1,7 +1,7 @@
 # MOGP (Multi-Objective Gaussian Process)
-this package is under construction  
-validation not done  
+this package is under construction 
 
+constrained/unconstrained multi-objective bayesian optimization package
 ## Install
 
 `python setup.py install`
@@ -60,6 +60,6 @@ if __name__ == "__main__":
     - zdt2: done
     - zdt3: done
     - zdt6: done
-    - Binh and Korn function
+    - Binh and Korn function: done
 - EHVI handling
 - test code
