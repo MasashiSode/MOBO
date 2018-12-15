@@ -1,10 +1,10 @@
 import collections
-import numpy as np
-import sklearn.gaussian_process as gp
-import multiprocessing as mp
-from scipy.stats import norm
 import copy
+import multiprocessing as mp
 import warnings
+import numpy as np
+from scipy.stats import norm
+import sklearn.gaussian_process as gp
 
 
 class MpHelper(object):
@@ -336,6 +336,18 @@ class GaussianProcess():
             under construction!
 
         """
+        # mu = np.zeros(self.n_obj)
+        # sigma = np.zeros(self.n_obj)
+        # ei_x = np.zeros(self.n_obj)
+        # self.f_ref = np.zeros(self.n_obj)
+
+        # for i_obj in range(0, self.n_obj):
+        #     with np.errstate(divide='ignore'):
+        #         Z = (self.f_ref[i_obj] - mu[i_obj]) / sigma[i_obj]
+        #         ei_x[i_obj] = \
+        #             (self.f_ref[i_obj] - mu[i_obj]) * \
+        #             norm.cdf(Z) + sigma[i_obj] * norm.pdf(Z)
+        #     ei_x[sigma[i_obj] == 0.0] = 0.0
 
         print('this funcion is under construction, use another fucntion')
         raise
