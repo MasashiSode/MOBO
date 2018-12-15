@@ -1,7 +1,7 @@
 import numpy as np
 import MOGP
 import matplotlib.pyplot as plt
-from pyDOE import lhs
+# from pyDOE import lhs
 
 
 if __name__ == "__main__":
