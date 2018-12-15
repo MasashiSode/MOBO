@@ -1,13 +1,11 @@
-from . import GP
+import copy
+import multiprocessing as mp
 import numpy as np
-# import multiprocessing as mp
-import pygmo
-# from pygmo.problem import base
 import sklearn.gaussian_process as gp
 from sklearn.cluster import KMeans as km
-import multiprocessing as mp
-import copy
+import pygmo
 from pyDOE import lhs
+from . import GP
 
 
 class MultiObjectiveBayesianOptimization(object):

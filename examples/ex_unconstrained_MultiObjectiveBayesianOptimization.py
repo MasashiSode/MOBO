@@ -1,6 +1,6 @@
 import numpy as np
-import MOGP
 import matplotlib.pyplot as plt
+import MOGP
 
 
 if __name__ == "__main__":
