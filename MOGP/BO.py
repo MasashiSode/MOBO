@@ -162,6 +162,31 @@ class MultiObjectiveBayesianOptimization(object):
         print('moga done.')
         return
 
+    def run_moead(self, size=48, gen=100):
+        """
+        runs multi-objective genetic algorithm
+        using gaussian process regression.
+        objective function is Expected Improvement.
+        Args:
+            size (int): population size (default=48)
+            gen (int): generation size (default=100)
+        Examples::
+            mobo = MOGP.MultiObjectiveBayesianOptimization()
+            mobo.set_train_data(x_observed, y_observed)
+            mobo.train_GPModel()
+        """
+        print('moead running...')
+        self.prob = pygmo.problem(BayesianOptimizationProblem(self.mogp))
+        self.pop = pygmo.population(self.prob, size=size)
+        self.algo = pygmo.algorithm(pygmo.moead(gen=gen))
+        self.pop = self.algo.evolve(self.pop)
+
+        self.non_dominated_fronts, self.domination_list, \
+            self.domination_count, self.non_domination_ranks = \
+            pygmo.fast_non_dominated_sorting(self.pop.get_f())
+        print('moga done.')
+        return
+
     def run_kmeans(self, n_clusters=8, init='k-means++',
                    n_init=10, max_iter=300,
                    tol=0.0001, precompute_distances='auto', verbose=0,
@@ -311,6 +336,7 @@ class MultiObjectiveBayesianOptimization(object):
 
             # multi-objective optimization(nsga2) on surrogate model
             self.run_moga(size=ga_pop_size, gen=ga_gen, m=mutation)
+            # self.run_moead(size=ga_pop_size, gen=ga_gen)
 
             # clustering solutions
             self.run_kmeans(n_clusters=n_new_ind, n_jobs=-1, n_init=20)
