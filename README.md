@@ -1,7 +1,7 @@
 # MOGP (Multi-Objective Gaussian Process)
-this package is under construction 
 
 constrained/unconstrained multi-objective bayesian optimization package
+
 ## Install
 
 `python setup.py install`
