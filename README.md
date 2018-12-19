@@ -8,7 +8,7 @@ constrained/unconstrained multi-objective bayesian optimization package
 
 ## Usage
 
-see also [exapmles](https://github.com/MasashiSode/MOGP/tree/master/examples)
+see also [examples](https://github.com/MasashiSode/MOGP/tree/master/examples)
 
 ```python
 import numpy as np
