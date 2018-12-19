@@ -1,11 +1,11 @@
 # HTML Junk
-# *.html
-# *.doctree
-# *.js
-# *.css
+*.html
+*.doctree
+*.js
+*.css
 *.json
-# *.htm
-# *.pickle
+*.htm
+*.pickle
 *.idea*
 
 # Other
