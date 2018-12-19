@@ -12,10 +12,10 @@ MOBO.BO module
     :undoc-members:
     :show-inheritance:
 
-MOBO.MOGP module
+MOBO.GP module
 ----------------
 
-.. automodule:: MOBO.MOGP
+.. automodule:: MOBO.GP
     :members:
     :undoc-members:
     :show-inheritance:

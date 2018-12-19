@@ -86,7 +86,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">MOBO package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-MOBO.BO">MOBO.BO module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-MOBO.MOGP">MOBO.MOGP module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-MOBO.GP">MOBO.GP module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-MOBO">Module contents</a></li>
 </ul>
 </li>
@@ -201,56 +201,68 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>n_clusters</strong> – int, optional, default: 8
+<li><strong>n_clusters</strong> (<em>int</em>) – optional, default 8
 The number of clusters to form as well as the number of
 centroids to generate.</li>
-<li><strong>init</strong> – {‘k-means++’, ‘random’ or an ndarray}
+<li><strong>init</strong> – (‘k-means++’, ‘random’ or an ndarray)
 Method for initialization, defaults to ‘k-means++’:
 ‘k-means++’ : selects initial cluster centers for k-mean
 clustering in a smart way to speed up convergence. See section
 Notes in k_init for more details.
 ‘random’: choose k observations (rows) at random from data for
 the initial centroids.
-If an ndarray is passed, it should be of shape (n_clusters, n_features)
+If an ndarray is passed, it should be of shape
+(n_clusters, n_features)
 and gives the initial centers.</li>
-<li><strong>n_init</strong> – int, default: 10
+<li><strong>n_init</strong> (<em>int</em>) – default 10
 Number of time the k-means algorithm will be run with different
 centroid seeds. The final results will be the best output of
 n_init consecutive runs in terms of inertia.</li>
-<li><strong>max_iter</strong> – int, default: 300
+<li><strong>max_iter</strong> (<em>int</em>) – default 300
 Maximum number of iterations of the k-means algorithm for a
 single run.</li>
 <li><strong>tol</strong> – float, default: 1e-4
-Relative tolerance with regards to inertia to declare convergence</li>
+Relative tolerance with regards
+to inertia to declare convergence</li>
 <li><strong>precompute_distances</strong> – {‘auto’, True, False}
 Precompute distances (faster but takes more memory).
-‘auto’ : do not precompute distances if n_samples * n_clusters &gt; 12
-million. This corresponds to about 100MB overhead per job using
+‘auto’ : do not precompute distances
+if n_samples * n_clusters &gt; 12 million.
+This corresponds to about 100MB overhead per job using
 double precision.
 True : always precompute distances
 False : never precompute distances</li>
 <li><strong>verbose</strong> – int, default 0
 Verbosity mode.</li>
 <li><strong>random_state</strong> – int, RandomState instance or None (default)
-Determines random number generation for centroid initialization. Use
+Determines random number generation
+for centroid initialization. Use
 an int to make the randomness deterministic.</li>
 <li><strong>copy_x</strong> – boolean, optional
-When pre-computing distances it is more numerically accurate to center
-the data first.  If copy_x is True (default), then the original data is
-not modified, ensuring X is C-contiguous.  If False, the original data
-is modified, and put back before the function returns, but small
-numerical differences may be introduced by subtracting and then adding
-the data mean, in this case it will also not ensure that data is
+When pre-computing distances
+it is more numerically accurate to center
+the data first.  If copy_x is True (default),
+then the original data is
+not modified, ensuring X is C-contiguous.
+If False, the original data
+is modified, and put back before the function returns,
+but small numerical differences may be
+introduced by subtracting and then adding
+the data mean, in this case
+it will also not ensure that data is
 C-contiguous which may cause a significant slowdown.</li>
 <li><strong>n_jobs</strong> – int or None, optional (default=None)
-The number of jobs to use for the computation. This works by computing
-each of the n_init runs in parallel.
-<code class="docutils literal notranslate"><span class="pre">None</span></code> means 1 unless in a <code class="xref py py-obj docutils literal notranslate"><span class="pre">joblib.parallel_backend</span></code> context.
+The number of jobs to use for the computation.
+This works by computing each of the n_init runs in parallel.
+<code class="docutils literal notranslate"><span class="pre">None</span></code> means 1 unless in a <code class="xref py py-obj docutils literal notranslate"><span class="pre">joblib.parallel_backend</span></code>
+context.
 <code class="docutils literal notranslate"><span class="pre">-1</span></code> means using all processors.</li>
 <li><strong>algorithm</strong> – “auto”, “full” or “elkan”, default=”auto”
-K-means algorithm to use. The classical EM-style algorithm is “full”.
+K-means algorithm to use.
+The classical EM-style algorithm is “full”.
 The “elkan” variation is more efficient by using the triangle
-inequality, but currently doesn’t support sparse data. “auto” chooses
+inequality, but currently doesn’t support sparse data.
+“auto” chooses
 “elkan” for dense data and “full” for sparse data.</li>
 </ul>
 </td>
@@ -270,22 +282,65 @@ inequality, but currently doesn’t support sparse data. “auto” chooses
 </dd></dl>
 
 <dl class="method">
-<dt id="MOBO.BO.MultiObjectiveBayesianOptimization.run_moga">
-<code class="descname">run_moga</code><span class="sig-paren">(</span><em>size=48</em>, <em>gen=100</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.BO.MultiObjectiveBayesianOptimization.run_moga" title="Permalink to this definition">¶</a></dt>
-<dd><p>runs multi-objective genetic algorithm using gaussian process regression.
-objective function is Expected Improvement.</p>
+<dt id="MOBO.BO.MultiObjectiveBayesianOptimization.run_mobo">
+<code class="descname">run_mobo</code><span class="sig-paren">(</span><em>func=None</em>, <em>args=[]</em>, <em>n_dv=0</em>, <em>n_obj_cons=0</em>, <em>n_init_lhs_samples=24</em>, <em>n_iter=10</em>, <em>n_new_ind=16</em>, <em>ga_pop_size=100</em>, <em>ga_gen=50</em>, <em>n_cons=0</em>, <em>mutation=0.03</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.BO.MultiObjectiveBayesianOptimization.run_mobo" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs multi-objective bayesian optimization</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>size</strong> (<em>int</em>) – population size (default=48)</li>
-<li><strong>gen</strong> (<em>int</em>) – generation size (default=100)</li>
+<li><strong>func</strong> – multi objective function you want to minimize.
+y = f(x, agrs=[])
+0 &lt;= x[i] &lt;=1</li>
+<li><strong>args</strong> (<em>list</em>) – parameters for the function.</li>
+<li><strong>n_dv</strong> (<em>int</em>) – number of design variabels</li>
+<li><strong>n_obj</strong> (<em>int</em>) – number of objective functions
+n_init_lhs_sampling (int):
+initial population of bayesian optimization</li>
+<li><strong>n_iter</strong> (<em>int</em>) – number of iteration of bayesian optimization
+n_new_ind (int): number of new indivisuals in each iteration.</li>
+<li><strong>ga_pop_size</strong> (<em>int</em>) – population size of multi
+objective genetic algorithm (NSGA2)
+ga_pop_size must be multiply number of four.</li>
+<li><strong>ga_gen</strong> (<em>int</em>) – generation number of
+multi objective genetic algorithm (NSGA2)</li>
+<li><strong>n_cons</strong> (<em>int</em>) – number of constraints functions</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MOBO.BO.MultiObjectiveBayesianOptimization.run_moead">
+<code class="descname">run_moead</code><span class="sig-paren">(</span><em>size=48</em>, <em>gen=100</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.BO.MultiObjectiveBayesianOptimization.run_moead" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs multi-objective genetic algorithm
+using gaussian process regression.
+objective function is Expected Improvement.
+:param size: population size (default=48)
+:type size: int
+:param gen: generation size (default=100)
+:type gen: int</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mobo</span> <span class="o">=</span> <span class="n">MOBO</span><span class="o">.</span><span class="n">MultiObjectiveBayesianOptimization</span><span class="p">()</span>
+<span class="n">mobo</span><span class="o">.</span><span class="n">set_train_data</span><span class="p">(</span><span class="n">x_observed</span><span class="p">,</span> <span class="n">y_observed</span><span class="p">)</span>
+<span class="n">mobo</span><span class="o">.</span><span class="n">train_GPModel</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MOBO.BO.MultiObjectiveBayesianOptimization.run_moga">
+<code class="descname">run_moga</code><span class="sig-paren">(</span><em>size=48</em>, <em>gen=100</em>, <em>m=0.03</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.BO.MultiObjectiveBayesianOptimization.run_moga" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs multi-objective genetic algorithm
+using gaussian process regression.
+objective function is Expected Improvement.
+:param size: population size (default=48)
+:type size: int
+:param gen: generation size (default=100)
+:type gen: int</p>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mobo</span> <span class="o">=</span> <span class="n">MOBO</span><span class="o">.</span><span class="n">MultiObjectiveBayesianOptimization</span><span class="p">()</span>
 <span class="n">mobo</span><span class="o">.</span><span class="n">set_train_data</span><span class="p">(</span><span class="n">x_observed</span><span class="p">,</span> <span class="n">y_observed</span><span class="p">)</span>
@@ -298,8 +353,8 @@ objective function is Expected Improvement.</p>
 <dt id="MOBO.BO.MultiObjectiveBayesianOptimization.set_number_of_cpu_core">
 <code class="descname">set_number_of_cpu_core</code><span class="sig-paren">(</span><em>n_multiprocessing=4</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.BO.MultiObjectiveBayesianOptimization.set_number_of_cpu_core" title="Permalink to this definition">¶</a></dt>
 <dd><p>sets number of cpu cores you use in
-multi-objective EI calculation (default all cpu)</p>
-<p>Examples:</p>
+multi-objective EI calculation (default all cpu)
+Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cpu</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">mobo</span><span class="o">.</span><span class="n">set_number_of_cpu_core</span><span class="p">(</span><span class="n">cpu</span><span class="p">)</span>
 </pre></div>
@@ -313,13 +368,14 @@ multi-objective EI calculation (default all cpu)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction_list</strong> (<em>list</em>) – list of 1 and -1 which expresses the direction of optimum</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction_list</strong> (<em>list</em>) – list of 1 and -1
+which expresses the direction of optimum</td>
 </tr>
 </tbody>
 </table>
 <p>Examples:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">direction_list</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">mogp</span><span class="o">.</span><span class="n">set_optimum_direction</span><span class="p">(</span><span class="n">direction_list</span><span class="p">)</span>
+<span class="n">mobo</span><span class="o">.</span><span class="n">set_optimum_direction</span><span class="p">(</span><span class="n">direction_list</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -333,15 +389,15 @@ multi-objective EI calculation (default all cpu)</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>x_observed</strong> – np.array (n_samples, n_params)</li>
-<li><strong>y_observed</strong> – np.array (n_samples, n_obj)</li>
+<li><strong>y_observed</strong> – np.array (n_samples, n_obj + n_cons)</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mogp</span> <span class="o">=</span> <span class="n">MOGPOpt</span><span class="o">.</span><span class="n">MOGP</span><span class="p">()</span>
-<span class="n">mogp</span><span class="o">.</span><span class="n">set_train_data</span><span class="p">(</span><span class="n">x_observed</span><span class="p">,</span> <span class="n">y_observed</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mobo</span> <span class="o">=</span> <span class="n">MOBO</span><span class="o">.</span><span class="n">MultiObjectiveBayesianOptimization</span><span class="p">()</span>
+<span class="n">mobo</span><span class="o">.</span><span class="n">set_train_data</span><span class="p">(</span><span class="n">x_observed</span><span class="p">,</span> <span class="n">y_observed</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -359,26 +415,21 @@ multi-objective EI calculation (default all cpu)</p>
 
 </dd></dl>
 
-<dl class="function">
-<dt id="MOBO.BO.ReadInput">
-<code class="descclassname">MOBO.BO.</code><code class="descname">ReadInput</code><span class="sig-paren">(</span><em>InputFile</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.BO.ReadInput" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </div>
-<div class="section" id="module-MOBO.MOGP">
-<span id="mobo-mogp-module"></span><h2>MOBO.MOGP module<a class="headerlink" href="#module-MOBO.MOGP" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-MOBO.GP">
+<span id="mobo-gp-module"></span><h2>MOBO.GP module<a class="headerlink" href="#module-MOBO.GP" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="MOBO.MOGP.MOGP">
-<em class="property">class </em><code class="descclassname">MOBO.MOGP.</code><code class="descname">MOGP</code><a class="headerlink" href="#MOBO.MOGP.MOGP" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.GaussianProcess">
+<em class="property">class </em><code class="descclassname">MOBO.GP.</code><code class="descname">GaussianProcess</code><a class="headerlink" href="#MOBO.GP.GaussianProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>MOGP (Multi-Objective Gaussian Process) core class</p>
+<p>Multi-Objective Gaussian Process core class</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>Set parameters first before train</p>
 <p class="last">(<a class="reference external" href="https://thuijskens.github.io/2016/12/29/bayesian-optimisation/">https://thuijskens.github.io/2016/12/29/bayesian-optimisation/</a>)</p>
 </div>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mogp</span> <span class="o">=</span> <span class="n">MOGPOpt</span><span class="o">.</span><span class="n">MOGP</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mogp</span> <span class="o">=</span> <span class="n">MOBO</span><span class="o">.</span><span class="n">GaussianProcess</span><span class="p">()</span>
 <span class="n">mogp</span><span class="o">.</span><span class="n">set_train_data</span><span class="p">(</span><span class="n">x_observed</span><span class="p">,</span> <span class="n">y_observed</span><span class="p">)</span>
 <span class="n">mogp</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">]])</span>
@@ -389,14 +440,14 @@ multi-objective EI calculation (default all cpu)</p>
 </pre></div>
 </div>
 <dl class="method">
-<dt id="MOBO.MOGP.MOGP.constrained_EI">
-<code class="descname">constrained_EI</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MOGP.constrained_EI" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.GaussianProcess.constrained_EI">
+<code class="descname">constrained_EI</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.constrained_EI" title="Permalink to this definition">¶</a></dt>
 <dd><p>uses probability of g(x) &lt;= 0. g &gt; 0 is infeasible.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="MOBO.MOGP.MOGP.expected_hypervolume_improvement">
-<code class="descname">expected_hypervolume_improvement</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MOGP.expected_hypervolume_improvement" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.GaussianProcess.expected_hypervolume_improvement">
+<code class="descname">expected_hypervolume_improvement</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.expected_hypervolume_improvement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Expected hypervolume improvement function.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -405,8 +456,8 @@ multi-objective EI calculation (default all cpu)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="MOBO.MOGP.MOGP.expected_improvement">
-<code class="descname">expected_improvement</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MOGP.expected_improvement" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.GaussianProcess.expected_improvement">
+<code class="descname">expected_improvement</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.expected_improvement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Expected improvement function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -425,8 +476,8 @@ multi-objective EI calculation (default all cpu)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="MOBO.MOGP.MOGP.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MOGP.predict" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.GaussianProcess.predict_original_coor">
+<code class="descname">predict_original_coor</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.predict_original_coor" title="Permalink to this definition">¶</a></dt>
 <dd><div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">use it after training</p>
@@ -437,7 +488,7 @@ multi-objective EI calculation (default all cpu)</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – np.array, size = [n_input, n_params]</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mean and variance size = [2, n_obj]</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mean and std size = [2, n_obj]</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">mu, sigma (float or list)</td>
 </tr>
@@ -452,26 +503,56 @@ multi-objective EI calculation (default all cpu)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="MOBO.MOGP.MOGP.probability_of_feasibility">
-<code class="descname">probability_of_feasibility</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MOGP.probability_of_feasibility" title="Permalink to this definition">¶</a></dt>
-<dd><p>expected_penalty
-Expected penalty to calculate the probability of constraints.
+<dt id="MOBO.GP.GaussianProcess.predict_standarize_value">
+<code class="descname">predict_standarize_value</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.predict_standarize_value" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">use it after training</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – np.array, size = [n_input, n_params]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mean and std size = [2, n_obj]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">mu, sigma (float or list)</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">])</span>
+<span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="n">mogp</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="MOBO.GP.GaussianProcess.probability_of_feasibility">
+<code class="descname">probability_of_feasibility</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.probability_of_feasibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the probability of feasibility.
 uses probability of g(x) &lt;= 0. g &gt; 0 is infeasible.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="MOBO.MOGP.MOGP.set_number_of_cpu_core">
-<code class="descname">set_number_of_cpu_core</code><span class="sig-paren">(</span><em>n_multiprocessing</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MOGP.set_number_of_cpu_core" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.GaussianProcess.set_number_of_cpu_core">
+<code class="descname">set_number_of_cpu_core</code><span class="sig-paren">(</span><em>n_multiprocessing</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.set_number_of_cpu_core" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="MOBO.MOGP.MOGP.set_optimum_direction">
-<code class="descname">set_optimum_direction</code><span class="sig-paren">(</span><em>direction_list</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MOGP.set_optimum_direction" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.GaussianProcess.set_optimum_direction">
+<code class="descname">set_optimum_direction</code><span class="sig-paren">(</span><em>direction_list</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.set_optimum_direction" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction_list</strong> (<em>list</em>) – list of 1 and -1 which expresses the direction of optimum</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>direction_list</strong> (<em>list</em>) – list of 1 and -1</li>
+<li><strong>expresses the direction of optimum</strong> (<em>which</em>) – </li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -483,8 +564,8 @@ uses probability of g(x) &lt;= 0. g &gt; 0 is infeasible.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="MOBO.MOGP.MOGP.set_train_data">
-<code class="descname">set_train_data</code><span class="sig-paren">(</span><em>x_observed</em>, <em>y_observed</em>, <em>n_cons=0</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MOGP.set_train_data" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.GaussianProcess.set_train_data">
+<code class="descname">set_train_data</code><span class="sig-paren">(</span><em>x_observed</em>, <em>y_observed</em>, <em>n_cons=0</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.set_train_data" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -498,15 +579,15 @@ uses probability of g(x) &lt;= 0. g &gt; 0 is infeasible.</p>
 </tbody>
 </table>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mogp</span> <span class="o">=</span> <span class="n">MOGPOpt</span><span class="o">.</span><span class="n">MOGP</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mogp</span> <span class="o">=</span> <span class="n">MOBO</span><span class="o">.</span><span class="n">GaussianProcess</span><span class="p">()</span>
 <span class="n">mogp</span><span class="o">.</span><span class="n">set_train_data</span><span class="p">(</span><span class="n">x_observed</span><span class="p">,</span> <span class="n">y_observed</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="method">
-<dt id="MOBO.MOGP.MOGP.train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>kernel=Matern(length_scale=1</em>, <em>nu=1.5)</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MOGP.train" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.GaussianProcess.train">
+<code class="descname">train</code><span class="sig-paren">(</span><em>kernel=Matern(length_scale=1</em>, <em>nu=1.5)</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>trains Gaussian process for regression</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -522,7 +603,7 @@ uses probability of g(x) &lt;= 0. g &gt; 0 is infeasible.</p>
 </tbody>
 </table>
 <p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mogp</span> <span class="o">=</span> <span class="n">MOGPOpt</span><span class="o">.</span><span class="n">MOGP</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mogp</span> <span class="o">=</span> <span class="n">MOBO</span><span class="o">.</span><span class="n">GaussianProcess</span><span class="p">()</span>
 <span class="n">mogp</span><span class="o">.</span><span class="n">set_train_data</span><span class="p">(</span><span class="n">x_observed</span><span class="p">,</span> <span class="n">y_observed</span><span class="p">)</span>
 <span class="n">mogp</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
 </pre></div>
@@ -530,20 +611,20 @@ uses probability of g(x) &lt;= 0. g &gt; 0 is infeasible.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="MOBO.MOGP.MOGP.wrapper_mp">
-<code class="descname">wrapper_mp</code><span class="sig-paren">(</span><em>i_obj</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MOGP.wrapper_mp" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.GaussianProcess.wrapper_mp">
+<code class="descname">wrapper_mp</code><span class="sig-paren">(</span><em>i_obj</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.GaussianProcess.wrapper_mp" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="MOBO.MOGP.MpHelper">
-<em class="property">class </em><code class="descclassname">MOBO.MOGP.</code><code class="descname">MpHelper</code><span class="sig-paren">(</span><em>cls</em>, <em>mtd_name</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.MOGP.MpHelper" title="Permalink to this definition">¶</a></dt>
+<dt id="MOBO.GP.MpHelper">
+<em class="property">class </em><code class="descclassname">MOBO.GP.</code><code class="descname">MpHelper</code><span class="sig-paren">(</span><em>cls</em>, <em>mtd_name</em><span class="sig-paren">)</span><a class="headerlink" href="#MOBO.GP.MpHelper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>helper function for multiprocessing to call class method</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">japaese site
+<p class="last">japanese site
 <a class="reference external" href="http://aflc.hatenablog.com/entry/20110825/1314366131">http://aflc.hatenablog.com/entry/20110825/1314366131</a></p>
 </div>
 </dd></dl>
