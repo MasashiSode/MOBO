@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import MOGP
+import MOBO
 
 
 if __name__ == "__main__":
@@ -20,10 +20,10 @@ if __name__ == "__main__":
     mutation = 0.04
 
     # user defined function y = f(x, args=[])
-    func = MOGP.TestFunctions.ChakongHaimesFunction
-    # func = MOGP.TestFunctions.OsyczkaKunduFunction
+    func = MOBO.TestFunctions.ChakongHaimesFunction
+    # func = MOBO.TestFunctions.OsyczkaKunduFunction
 
-    mobo = MOGP.MultiObjectiveBayesianOptimization()
+    mobo = MOBO.MultiObjectiveBayesianOptimization()
     mobo.run_mobo(func=func, args=[],
                   n_dv=n_dv, n_obj_cons=n_obj_cons,
                   n_init_lhs_samples=n_init_lhs_samples,

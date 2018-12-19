@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import MOGP
+import MOBO
 
 
 if __name__ == "__main__":
@@ -18,10 +18,10 @@ if __name__ == "__main__":
     ga_gen = 50
 
     # user defined function y = f(x, args=[])
-    zdt = MOGP.TestFunctions.ZDT()
+    zdt = MOBO.TestFunctions.ZDT()
     func = zdt.get_func(n_zdt)
 
-    mobo = MOGP.MultiObjectiveBayesianOptimization()
+    mobo = MOBO.MultiObjectiveBayesianOptimization()
     mobo.run_mobo(func=func, args=[],
                   n_dv=n_dv, n_obj_cons=n_obj_cons,
                   n_init_lhs_samples=n_init_lhs_samples,

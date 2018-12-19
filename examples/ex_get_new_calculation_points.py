@@ -1,5 +1,5 @@
 import numpy as np
-import MOGP
+import MOBO
 
 
 def ReadInput(InputFile):
@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # y_observed: np.array (n_samples, n_obj + n_cons)
     y_observed = ReadInput('InputObj.csv')
 
-    mobo = MOGP.MultiObjectiveBayesianOptimization()
+    mobo = MOBO.MultiObjectiveBayesianOptimization()
     mobo.set_train_data(x_observed, y_observed, n_cons=0)
 
     # training Gaussian Process regression
