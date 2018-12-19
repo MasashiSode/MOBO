@@ -32,7 +32,7 @@ if __name__ == "__main__":
     ga_gen = 50
 
     # user defined function y = f(x, args=[])
-    zdt = MOGP.TestFunctions.ZDT()
+    zdt = MOBO.TestFunctions.ZDT()
     func = zdt.get_func(n_zdt)
 
     mobo = MOBO.MultiObjectiveBayesianOptimization()
