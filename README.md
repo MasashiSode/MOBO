@@ -1,4 +1,4 @@
-# MOGP (Multi-Objective Gaussian Process)
+# MOBO (Multi-Objective Bayesian Optimization)
 
 constrained/unconstrained multi-objective bayesian optimization package
 
@@ -12,7 +12,7 @@ see also https://github.com/MasashiSode/MOGP/tree/master/examples
 
 ```python
 import numpy as np
-import MOGP as MOGP
+import MOBO
 import matplotlib.pyplot as plt
 from pyDOE import lhs
 
@@ -32,10 +32,10 @@ if __name__ == "__main__":
     ga_gen = 50
 
     # user defined function y = f(x, args=[])
-    zdt = MOGP.TestFunctions.ZDT()
+    zdt = MOBO.TestFunctions.ZDT()
     func = zdt.get_func(n_zdt)
 
-    mobo = MOGP.MultiObjectiveBayesianOptimization()
+    mobo = MOBO.MultiObjectiveBayesianOptimization()
     mobo.run_mobo(func=func, args=[],
                   n_dv=n_dv, n_obj=n_obj,
                   n_init_lhs_samples=n_init_lhs_samples,
