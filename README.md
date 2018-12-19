@@ -12,43 +12,59 @@ see also https://github.com/MasashiSode/MOGP/tree/master/examples
 
 ```python
 import numpy as np
-import MOBO
 import matplotlib.pyplot as plt
-from pyDOE import lhs
+import MOBO
 
 
 if __name__ == "__main__":
-    n_zdt = 2
 
     n_init_lhs_samples = 24
 
     n_dv = 2
-    n_obj = 2
+    n_obj_cons = 4
+    n_cons = 2
 
-    n_iter = 10
-    n_new_ind = 16
+    n_iter = 16
+    n_new_ind = 4
 
     ga_pop_size = 100
     ga_gen = 50
 
+    mutation = 0.04
+
     # user defined function y = f(x, args=[])
-    zdt = MOBO.TestFunctions.ZDT()
-    func = zdt.get_func(n_zdt)
+    func = MOBO.TestFunctions.ChakongHaimesFunction
+    # func = MOBO.TestFunctions.OsyczkaKunduFunction
 
     mobo = MOBO.MultiObjectiveBayesianOptimization()
     mobo.run_mobo(func=func, args=[],
-                  n_dv=n_dv, n_obj=n_obj,
+                  n_dv=n_dv, n_obj_cons=n_obj_cons,
                   n_init_lhs_samples=n_init_lhs_samples,
                   n_iter=n_iter, n_new_ind=n_new_ind,
-                  ga_pop_size=ga_pop_size, ga_gen=ga_gen, n_cons=0)
+                  ga_pop_size=ga_pop_size, ga_gen=ga_gen, n_cons=n_cons,
+                  mutation=mutation)
 
-    np.savetxt('ZDT' + str(n_zdt) + '_obj_res.csv',
-               mobo.y_observed, delimiter=',')
-    np.savetxt('ZDT' + str(n_zdt) + '_var_res.csv',
-               mobo.x_observed, delimiter=',')
+    np.savetxt('func_obj_res.csv',
+               mobo.y_observed_org_coor, delimiter=',')
+    np.savetxt('func_var_res.csv',
+               mobo.x_observed_org_coor, delimiter=',')
 
+    index = np.all(
+        mobo.y_observed_org_coor[:, n_obj_cons - n_cons + 1:n_obj_cons] < 0,
+        axis=1)
+
+    out_feasible = mobo.y_observed_org_coor[index]
+    # out_feasible_new_ind = mobo.y_observed_org_coor[index_new_ind]
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
     plt.grid(True)
-    plt.scatter(mobo.y_observed[:, 0], mobo.y_observed[:, 1])
+    plt.scatter(
+        mobo.y_observed_org_coor[:, 0], mobo.y_observed_org_coor[:, 1],
+        label='infeasible')
+    plt.scatter(out_feasible[:, 0], out_feasible[:, 1], label='feasible')
+
+    ax.legend()
     plt.show()
 
 ```
