@@ -1,13 +1,12 @@
 # HTML Junk
-*.html
-*.doctree
-*_build*
-*.js
-*.css
+# *.html
+# *.doctree
+# *.js
+# *.css
 *.json
-*.htm
-*.pickle
-.idea
+# *.htm
+# *.pickle
+*.idea*
 
 # Other
 *.pyc
