@@ -36,7 +36,7 @@ class GaussianProcess():
 
     Example::
 
-        mogp = MOGP.MOGP()
+        mogp = MOBO.GaussianProcess()
         mogp.set_train_data(x_observed, y_observed)
         mogp.train()
         x = np.array([[-5, -5]])
@@ -70,7 +70,7 @@ class GaussianProcess():
 
         Example::
 
-            mogp = MOGP.MOGP()
+            mogp = MOBO.GaussianProcess()
             mogp.set_train_data(x_observed, y_observed)
 
         """
@@ -156,7 +156,7 @@ class GaussianProcess():
 
         Example::
 
-            mogp = MOGPOpt.MOGP()
+            mogp = MOBO.GaussianProcess()
             mogp.set_train_data(x_observed, y_observed)
             mogp.train()
         """
