@@ -12,9 +12,9 @@ see also https://github.com/MasashiSode/MOGP/tree/master/examples
 
 ```python
 import numpy as np
-import MOBO
 import matplotlib.pyplot as plt
 from pyDOE import lhs
+import MOBO
 
 
 if __name__ == "__main__":
