@@ -18,8 +18,10 @@ class MultiObjectiveBayesianOptimization(object):
         Args:
             x_observed: np.array (n_samples, n_params)
             y_observed: np.array (n_samples, n_obj + n_cons)
+
         Example::
-            mobo = MOGP.MultiObjectiveBayesianOptimization()
+
+            mobo = MOBO.MultiObjectiveBayesianOptimization()
             mobo.set_train_data(x_observed, y_observed)
         """
         if not isinstance(x_observed, np.ndarray):
@@ -93,6 +95,7 @@ class MultiObjectiveBayesianOptimization(object):
             direction_list (list): list of 1 and -1
                 which expresses the direction of optimum
         Examples::
+
             direction_list = [-1, 1, -1]
             mobo.set_optimum_direction(direction_list)
         """
@@ -110,6 +113,7 @@ class MultiObjectiveBayesianOptimization(object):
         sets number of cpu cores you use in
         multi-objective EI calculation (default all cpu)
         Examples::
+
             cpu = 4
             mobo.set_number_of_cpu_core(cpu)
         """
@@ -122,7 +126,8 @@ class MultiObjectiveBayesianOptimization(object):
     def train_GPModel(self, kernel=gp.kernels.Matern()):
         """
         Examples::
-            mobo = MOGP.MultiObjectiveBayesianOptimization()
+
+            mobo = MOBO.MultiObjectiveBayesianOptimization()
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
         """
@@ -145,8 +150,10 @@ class MultiObjectiveBayesianOptimization(object):
         Args:
             size (int): population size (default=48)
             gen (int): generation size (default=100)
+
         Examples::
-            mobo = MOGP.MultiObjectiveBayesianOptimization()
+
+            mobo = MOBO.MultiObjectiveBayesianOptimization()
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
         """
@@ -170,8 +177,10 @@ class MultiObjectiveBayesianOptimization(object):
         Args:
             size (int): population size (default=48)
             gen (int): generation size (default=100)
+
         Examples::
-            mobo = MOGP.MultiObjectiveBayesianOptimization()
+
+            mobo = MOBO.MultiObjectiveBayesianOptimization()
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
         """
@@ -193,11 +202,14 @@ class MultiObjectiveBayesianOptimization(object):
                    random_state=None, copy_x=True, n_jobs=1):
         """
         clustering parate front solutions by k-means
+
         Args:
-            n_clusters : int, optional, default: 8
+
+            n_clusters (int): optional, default 8
                 The number of clusters to form as well as the number of
                 centroids to generate.
-            init : {'k-means++', 'random' or an ndarray}
+
+            init: ('k-means++', 'random' or an ndarray)
                 Method for initialization, defaults to 'k-means++':
                 'k-means++' : selects initial cluster centers for k-mean
                 clustering in a smart way to speed up convergence. See section
@@ -207,16 +219,20 @@ class MultiObjectiveBayesianOptimization(object):
                 If an ndarray is passed, it should be of shape
                 (n_clusters, n_features)
                 and gives the initial centers.
-            n_init : int, default: 10
+
+            n_init (int): default 10
                 Number of time the k-means algorithm will be run with different
                 centroid seeds. The final results will be the best output of
                 n_init consecutive runs in terms of inertia.
-            max_iter : int, default: 300
+
+            max_iter (int): default 300
                 Maximum number of iterations of the k-means algorithm for a
                 single run.
-            tol : float, default: 1e-4
+
+            tol: float, default: 1e-4
                 Relative tolerance with regards
                 to inertia to declare convergence
+
             precompute_distances : {'auto', True, False}
                 Precompute distances (faster but takes more memory).
                 'auto' : do not precompute distances
@@ -225,12 +241,15 @@ class MultiObjectiveBayesianOptimization(object):
                 double precision.
                 True : always precompute distances
                 False : never precompute distances
+
             verbose : int, default 0
                 Verbosity mode.
+
             random_state : int, RandomState instance or None (default)
                 Determines random number generation
                 for centroid initialization. Use
                 an int to make the randomness deterministic.
+
             copy_x : boolean, optional
                 When pre-computing distances
                 it is more numerically accurate to center
@@ -244,12 +263,14 @@ class MultiObjectiveBayesianOptimization(object):
                 the data mean, in this case
                 it will also not ensure that data is
                 C-contiguous which may cause a significant slowdown.
+
             n_jobs : int or None, optional (default=None)
                 The number of jobs to use for the computation.
                 This works by computing each of the n_init runs in parallel.
                 ``None`` means 1 unless in a :obj:`joblib.parallel_backend`
                 context.
                 ``-1`` means using all processors.
+
             algorithm : "auto", "full" or "elkan", default="auto"
                 K-means algorithm to use.
                 The classical EM-style algorithm is "full".
@@ -257,10 +278,13 @@ class MultiObjectiveBayesianOptimization(object):
                 inequality, but currently doesn't support sparse data.
                 "auto" chooses
                 "elkan" for dense data and "full" for sparse data.
+
         Examples::
-            mobo = MOGP.MultiObjectiveBayesianOptimization()
+
+            mobo = MOBO.MultiObjectiveBayesianOptimization()
             mobo.set_train_data(x_observed, y_observed)
             mobo.train_GPModel()
+
         See Also:
             https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
         """
@@ -294,9 +318,9 @@ class MultiObjectiveBayesianOptimization(object):
                  ga_pop_size=100, ga_gen=50, n_cons=0, mutation=0.03):
         """
         runs multi-objective bayesian optimization
+
         Args:
-            func:
-                multi objective function you want to minimize.
+            func: multi objective function you want to minimize.
                 y = f(x, agrs=[])
                 0 <= x[i] <=1
             args (list):
