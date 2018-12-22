@@ -52,25 +52,6 @@ if __name__ == "__main__":
                mobo.y_observed_org_coor, delimiter=',')
     np.savetxt('func_var_res.csv',
                mobo.x_observed_org_coor, delimiter=',')
-
-    index = np.all(
-        mobo.y_observed_org_coor[:, n_obj_cons - n_cons + 1:n_obj_cons] < 0,
-        axis=1)
-
-    out_feasible = mobo.y_observed_org_coor[index]
-    # out_feasible_new_ind = mobo.y_observed_org_coor[index_new_ind]
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    plt.grid(True)
-    plt.scatter(
-        mobo.y_observed_org_coor[:, 0], mobo.y_observed_org_coor[:, 1],
-        label='infeasible')
-    plt.scatter(out_feasible[:, 0], out_feasible[:, 1], label='feasible')
-
-    ax.legend()
-    plt.show()
-
 ```
 
 ## ToDo
