@@ -4,10 +4,10 @@ constrained/unconstrained multi-objective bayesian optimization package
 
 ## Install
 
-```
-git clone https://github.com/MasashiSode/MOBO.git
-cd MOBO
-python setup.py install
+``` bash
+$ git clone https://github.com/MasashiSode/MOBO.git
+$ cd MOBO
+$ python setup.py install
 ```
 
 ## Usage
