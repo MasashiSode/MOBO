@@ -54,6 +54,11 @@ if __name__ == "__main__":
                mobo.x_observed_org_coor, delimiter=',')
 ```
 
+## Documentation
+
+still under development
+[MOBO Document page](https://www.masashisode.com/MOBO/)
+
 ## ToDo
 
 - validation
@@ -64,3 +69,4 @@ if __name__ == "__main__":
     - Binh and Korn function: done
 - EHVI handling
 - test code
+- Documentation
