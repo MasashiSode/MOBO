@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
 ## Documentation
 
-still under development  
+under development  
 [MOBO's Documentation](https://www.masashisode.com/MOBO/)
 
 ## ToDo
