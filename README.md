@@ -2,6 +2,8 @@
 
 constrained/unconstrained multi-objective bayesian optimization package
 
+under development
+
 ## Install
 
 ``` bash
