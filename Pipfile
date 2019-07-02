@@ -10,6 +10,7 @@ mypy = "*"
 autopep8 = "*"
 pytest = "*"
 pycodestyle = "*"
+flake8 = "*"
 
 [packages]
 numpy = "*"
