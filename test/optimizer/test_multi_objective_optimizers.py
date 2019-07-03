@@ -1,29 +1,19 @@
-from mobo.test_functions import schaffer_n1
-from mobo.optimizer import NSGA2, NSGA3, SMPSO
+import numpy as np
+from mobo.test_functions import zdt1
+from mobo.optimizer import NSGA2
 
 
 def test_nsga2():
-    optimizer = NSGA2()
-    x_range = [0, 1]
-    optimizer.x_range = x_range
-    optimizer.function = schaffer_n1
-    res = optimizer.run(n_generations=2)
-    assert type(res) == list
+    n_population = 4
+    nsga2 = NSGA2(evaluation_function=zdt1,
+                  bound_low=0.0,
+                  bound_up=1.0,
+                  n_design_variables_dimension=30,
+                  n_population=n_population,
+                  n_generation=1)
+    pop, _ = nsga2.run()
+    assert len(pop) == n_population
 
 
-def test_nsga3():
-    optimizer = NSGA3()
-    x_range = [0, 1]
-    optimizer.x_range = x_range
-    optimizer.function = schaffer_n1
-    res = optimizer.run(n_generations=2)
-    assert type(res) == list
-
-
-def test_smpso():
-    optimizer = SMPSO()
-    x_range = [0, 1]
-    optimizer.x_range = x_range
-    optimizer.function = schaffer_n1
-    res = optimizer.run(max_iterations=2)
-    assert type(res) == list
+if __name__ == "__main__":
+    test_nsga2()
