@@ -1,15 +1,15 @@
 import array
 import random
-import json
 
 import numpy as np
 
-from math import sqrt
+# from math import sqrt
 
-from deap import algorithms
+# from deap import algorithms
 from deap import base
 from deap import benchmarks
-from deap.benchmarks.tools import diversity, convergence, hypervolume
+from deap.benchmarks.tools import hypervolume
+# from deap.benchmarks.tools import convergence, diversity
 from deap import creator
 from deap import tools
 
