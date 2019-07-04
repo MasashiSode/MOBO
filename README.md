@@ -35,9 +35,9 @@ if __name__ == "__main__":
                                     n_objective_dimension=2,
                                     n_design_variables_dimension=30,
                                     n_initial_sample=16,
-                                    bayesian_optimization_iter_max=2,
+                                    bayesian_optimization_iter_max=10,
                                     likelihood_optimization_iter_max=1000,
-                                    likelihood_optimization_criteria=1e-3,
+                                    likelihood_optimization_criteria=1e-8,
                                     n_new_samples=16)
     result = opt.optimize()
 
