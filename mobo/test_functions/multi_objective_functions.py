@@ -15,6 +15,7 @@ def zdt1(x: np.ndarray) -> np.ndarray:
         x_in = copy.deepcopy(x)
     if np.any(x_in > 1) or np.any(x_in < 0):
         raise ValueError('0 <= x <= 1 is required')
+    x_in = x_in.T
 
     n_dv = x_in.shape[0]
     g = 1 + 9 * sum(x_in[1:]) / (n_dv - 1)

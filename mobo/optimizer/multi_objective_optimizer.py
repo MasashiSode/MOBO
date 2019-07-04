@@ -3,13 +3,8 @@ import random
 
 import numpy as np
 
-# from math import sqrt
-
-# from deap import algorithms
 from deap import base
-from deap import benchmarks
 from deap.benchmarks.tools import hypervolume
-# from deap.benchmarks.tools import convergence, diversity
 from deap import creator
 from deap import tools
 
@@ -21,7 +16,7 @@ class NSGA2():
                  bound_up=1.0,
                  n_design_variables_dimension=30,
                  n_population=24,
-                 n_generation=100,
+                 n_generation=10,
                  crossover_probability=0.9,
                  random_seed=9):
         self.random_seed = random_seed
@@ -73,7 +68,8 @@ class NSGA2():
         self.setup()
         # Evaluate the individuals with an invalid fitness
         invalid_ind = [ind for ind in self.pop if not ind.fitness.valid]
-        fitnesses = self.toolbox.map(self.toolbox.evaluate, invalid_ind)
+        fitnesses = list(
+            (self.toolbox.map(self.toolbox.evaluate, invalid_ind)))
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
 
@@ -126,14 +122,9 @@ class NSGA2():
 
 
 if __name__ == "__main__":
-    # with open("pareto_front/zdt1_front.json") as optimal_front_data:
-    #     optimal_front = json.load(optimal_front_data)
-    # # Use 500 of the 1000 points in the json file
-    # optimal_front = sorted(optimal_front[i]
-    #                        for i in range(0, len(optimal_front), 2))
+    from mobo.test_functions import zdt1
 
-    # pop, stats = main()
-    nsga2 = NSGA2(evaluation_function=benchmarks.zdt1,
+    nsga2 = NSGA2(evaluation_function=zdt1,
                   n_design_variables_dimension=30,
                   n_population=24,
                   n_generation=50)
@@ -141,15 +132,11 @@ if __name__ == "__main__":
     pop.sort(key=lambda x: x.fitness.values)
 
     print(stats)
-    # print("Convergence: ", convergence(pop, optimal_front))
-    # print("Diversity: ", diversity(pop, optimal_front[0], optimal_front[-1]))
 
     import matplotlib.pyplot as plt
-    # import numpy as np
 
     front = np.array([ind.fitness.values for ind in pop])
-    # optimal_front = np.array(optimal_front)
-    # plt.scatter(optimal_front[:, 0], optimal_front[:, 1], c="r")
+
     plt.scatter(front[:, 0], front[:, 1], c="b")
     plt.axis("tight")
     plt.show()
