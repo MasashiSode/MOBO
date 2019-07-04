@@ -1,20 +1,3 @@
-# MOBO (Multi-Objective Bayesian Optimization)
-
-constrained/unconstrained multi-objective bayesian optimization package
-
-under development
-
-## Install
-
-```bash
-$ git clone https://github.com/MasashiSode/MOBO.git
-$ cd MOBO
-$ pipenv install
-```
-
-## Usage
-
-```python
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -47,19 +30,3 @@ if __name__ == "__main__":
     plt.axis("tight")
     print(result)
     plt.show()
-```
-
-under development
-
-## Documentation
-
-under development  
-[MOBO's Documentation](https://www.masashisode.com/MOBO/)
-
-## ToDo
-
-- [ ] implement another multi objective optimizer
-- [ ] implement constrained EI
-- [ ] implement EHVI
-- [ ] implement UCB
-- [ ] validation

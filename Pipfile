@@ -1,0 +1,29 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+pep8 = "*"
+mypy = "*"
+autopep8 = "*"
+pytest = "*"
+pycodestyle = "*"
+flake8 = "*"
+deap = {editable = true, ref = "1.3.0"}
+
+[packages]
+numpy = "*"
+pandas = "*"
+matplotlib = "*"
+scipy = "*"
+sklearn = "*"
+633048b = {file = "https://download.pytorch.org/whl/cpu/torch-1.1.0-cp37-cp37m-linux_x86_64.whl"}
+633048a = {file = "https://download.pytorch.org/whl/cpu/torchvision-0.3.0-cp37-cp37m-linux_x86_64.whl"}
+gpytorch = "*"
+pydoe2 = "*"
+# deap = "1.3.0"
+
+[requires]
+python_version = "3.7"
