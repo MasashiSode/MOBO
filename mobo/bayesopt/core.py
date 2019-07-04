@@ -23,7 +23,7 @@ class MultiObjectiveBayesianOpt():
                  bayesian_optimization_iter_max=2,
                  likelihood_optimization_iter_max=1000,
                  likelihood_optimization_criteria=1e-3,
-                 n_new_samples=16
+                 n_new_samples=8
                  ):
         self.Initializer = Initializer
         self.surrogate_model = surrogate_model

@@ -15,8 +15,8 @@ class NSGA2():
                  bound_low=0.0,
                  bound_up=1.0,
                  n_design_variables_dimension=30,
-                 n_population=24,
-                 n_generation=10,
+                 n_population=100,
+                 n_generation=250,
                  crossover_probability=0.9,
                  random_seed=9):
         self.random_seed = random_seed
