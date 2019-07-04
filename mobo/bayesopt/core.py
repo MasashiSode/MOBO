@@ -23,7 +23,6 @@ class MultiObjectiveBayesianOpt():
                  bayesian_optimization_iter_max=2,
                  likelihood_optimization_iter_max=1000,
                  likelihood_optimization_criteria=1e-3,
-                 optimizer_kargs=None,
                  n_new_samples=16
                  ):
         self.Initializer = Initializer
@@ -45,7 +44,6 @@ class MultiObjectiveBayesianOpt():
             likelihood_optimization_iter_max
         self.likelihood_optimization_criteria = \
             likelihood_optimization_criteria
-        self.optimizer_kargs = optimizer_kargs
         self.n_new_samples = n_new_samples
 
     def _initialize(self):
