@@ -7,4 +7,4 @@ def ei(y_pred, y_train):
     y_min = y_train.numpy().min()
     z = (mean - y_min) / std
     out = (mean - y_min) * norm.cdf(z) + std * norm.pdf(z)
-    return -out[0]
+    return out[0]
