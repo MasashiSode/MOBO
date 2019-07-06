@@ -29,4 +29,5 @@ if __name__ == "__main__":
     plt.scatter(front[:, 0], front[:, 1], c="b")
     plt.axis("tight")
     print(result)
+    plt.savefig('fig.png')
     plt.show()
