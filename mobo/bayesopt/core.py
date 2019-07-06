@@ -143,11 +143,7 @@ class MultiObjectiveBayesianOpt():
         self._initialize()
         for bayesian_optimization_iter in range(
                 self.bayesian_optimization_iter_max):
-            if bayesian_optimization_iter > 0:
-                self.train_x = torch.cat((self.train_x, self.new_x), dim=0)
-                self.train_y = \
-                    torch.cat((self.train_y,
-                               torch.from_numpy(self.evaluation_function(self.new_x).T)), dim=0)
+
             self._train_likelihood()
 
             print('bayesian opt Iter %d/%d' % (
@@ -158,7 +154,10 @@ class MultiObjectiveBayesianOpt():
             #     break
 
             self.new_x = self._find_new_sample()
-
+            self.train_x = torch.cat((self.train_x, self.new_x), dim=0)
+            self.train_y = \
+                torch.cat((self.train_y,
+                           torch.from_numpy(self.evaluation_function(self.new_x).T)), dim=0)
         return self.train_x, self.train_y
 
 
