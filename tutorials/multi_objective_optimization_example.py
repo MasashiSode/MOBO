@@ -17,11 +17,14 @@ if __name__ == "__main__":
                                     acquisition=ei,
                                     n_objective_dimension=2,
                                     n_design_variables_dimension=30,
-                                    n_initial_sample=16,
-                                    bayesian_optimization_iter_max=10,
-                                    likelihood_optimization_iter_max=1000,
+                                    n_initial_sample=64,
+                                    bayesian_optimization_iter_max=3,
+                                    likelihood_optimization_iter_max=5000,
                                     likelihood_optimization_criteria=1e-8,
-                                    n_new_samples=8)
+                                    n_new_samples=16,
+                                    n_ga_population=100,
+                                    n_ga_generation=100,
+                                    )
     result = opt.optimize()
 
     front = np.array(result[1])
@@ -30,4 +33,6 @@ if __name__ == "__main__":
     plt.axis("tight")
     print(result)
     plt.savefig('fig.png')
+    np.savetxt('result_x.csv', result[0].numpy(), delimiter=',')
+    np.savetxt('result_y.csv', result[1].numpy(), delimiter=',')
     plt.show()

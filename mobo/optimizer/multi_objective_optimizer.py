@@ -15,8 +15,8 @@ class NSGA2():
                  bound_low=0.0,
                  bound_up=1.0,
                  n_design_variables_dimension=30,
-                 n_population=100,
-                 n_generation=250,
+                 n_population=16,
+                 n_generation=50,
                  crossover_probability=0.9,
                  random_seed=9):
         self.random_seed = random_seed
@@ -126,8 +126,8 @@ if __name__ == "__main__":
 
     nsga2 = NSGA2(evaluation_function=zdt1,
                   n_design_variables_dimension=30,
-                  n_population=24,
-                  n_generation=50)
+                  n_population=100,
+                  n_generation=100)
     pop, stats = nsga2.run()
     pop.sort(key=lambda x: x.fitness.values)
 
@@ -135,8 +135,12 @@ if __name__ == "__main__":
 
     import matplotlib.pyplot as plt
 
-    front = np.array([ind.fitness.values for ind in pop])
+    # front = np.array([ind.fitness.values for ind in pop])
+    result_x = np.array([list(ind) for ind in pop])
+    result_y = np.array([ind.fitness.values for ind in pop])
+    np.savetxt('result_x.csv', result_x, delimiter=',')
+    np.savetxt('result_y.csv', result_y, delimiter=',')
 
-    plt.scatter(front[:, 0], front[:, 1], c="b")
+    plt.scatter(result_y[:, 0], result_y[:, 1], c="b")
     plt.axis("tight")
     plt.show()

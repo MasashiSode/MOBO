@@ -23,7 +23,9 @@ class MultiObjectiveBayesianOpt():
                  bayesian_optimization_iter_max=10,
                  likelihood_optimization_iter_max=5000,
                  likelihood_optimization_criteria=1e-8,
-                 n_new_samples=8
+                 n_new_samples=8,
+                 n_ga_population=100,
+                 n_ga_generation=100,
                  ):
         self.Initializer = Initializer
         self.surrogate_model = surrogate_model
@@ -45,6 +47,8 @@ class MultiObjectiveBayesianOpt():
         self.likelihood_optimization_criteria = \
             likelihood_optimization_criteria
         self.n_new_samples = n_new_samples
+        self.n_ga_population = n_ga_population
+        self.n_ga_generation = n_ga_generation
 
     def _initialize(self):
         self.train_x = self.Initializer(
@@ -123,7 +127,9 @@ class MultiObjectiveBayesianOpt():
             ei_with_surrogate_model = self._wrap_model_and_acquisition()
             opt = copy.deepcopy(self.optimizer(
                 evaluation_function=ei_with_surrogate_model,
-                n_design_variables_dimension=self.n_design_variables_dimension))
+                n_design_variables_dimension=self.n_design_variables_dimension,
+                n_generation=self.n_ga_generation,
+                n_population=self.n_ga_population))
             pop, _ = opt.run()
             x = np.array([list(ind) for ind in pop])
             y = np.array([ind.fitness.values for ind in pop])
