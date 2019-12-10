@@ -133,7 +133,7 @@ class MultiObjectiveBayesianOpt():
             pop, _ = opt.run()
             x = np.array([list(ind) for ind in pop])
             y = np.array([ind.fitness.values for ind in pop])
-            kmeans = KMeans(n_clusters=self.n_new_samples)
+            kmeans = KMeans(n_clusters=self.n_new_samples, n_jobs=-1)
             kmeans.fit(x, y)
             new_samples = kmeans.cluster_centers_
         return torch.from_numpy(new_samples.astype(np.float32))
